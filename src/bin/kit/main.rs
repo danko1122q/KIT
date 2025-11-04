@@ -353,17 +353,18 @@ fn run() -> Result<bool> {
         return Ok(true);
     }
 
-    #[cfg(feature = "application")]
-    if let Some(shell) = app.matches.get_one::<String>("completion") {
-        match shell.as_str() {
-            "bash" => println!("{}", completions::BASH_COMPLETION),
-            "fish" => println!("{}", completions::FISH_COMPLETION),
-            "ps1" => println!("{}", completions::PS1_COMPLETION),
-            "zsh" => println!("{}", completions::ZSH_COMPLETION),
-            _ => unreachable!("No completion for shell '{shell}' available."),
-        }
-        return Ok(true);
+   #[cfg(feature = "application")]
+if let Some(shell) = app.matches.get_one::<String>("completion") {
+    match shell.as_str() {
+        "bash" => println!("{}", completions::bash_completion()),
+        "fish" => println!("{}", completions::fish_completion()),
+        "ps1" => println!("{}", completions::ps1_completion()),
+        "zsh" => println!("{}", completions::zsh_completion()),
+        _ => unreachable!("No completion for shell '{shell}' available."),
     }
+    return Ok(true);
+}
+
 
     match app.matches.subcommand() {
         Some(("cache", cache_matches)) => {

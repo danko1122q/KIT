@@ -191,7 +191,7 @@ impl HighlightingAssets {
             Some(theme) => theme,
             None => {
                 if theme == "ansi-light" || theme == "ansi-dark" {
-                    bat_warning!("Theme '{theme}' is deprecated, using 'ansi' instead.");
+                    kit_warning!("Theme '{theme}' is deprecated, using 'ansi' instead.");
                     return self.get_theme("ansi");
                 }
                 if !theme.is_empty() {

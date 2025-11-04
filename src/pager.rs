@@ -114,14 +114,14 @@ pub(crate) fn get_pager(config_pager: Option<&str>) -> Result<Option<Pager>, Par
             let kind = PagerKind::from_bin(bin);
 
             let use_less_instead = if source == PagerSource::EnvVarPager {
-                // 'more' and 'most' do not supports colors; automatically use
+                // 'more' and 'most' do not support colors; automatically use
                 // 'less' instead if the problematic pager came from the
                 // generic PAGER env var.
                 // If PAGER=kit, silently use 'less' instead to prevent
                 // recursion.
                 // Never silently use 'less' if KIT_PAGER or --pager has been
                 // specified.
-                matches!(kind, PagerKind::More | PagerKind::Most | PagerKind::Bat)
+                matches!(kind, PagerKind::More | PagerKind::Most | PagerKind::Kit)
             } else {
                 false
             };

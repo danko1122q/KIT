@@ -94,7 +94,8 @@ impl OutputType {
             None => return Ok(OutputType::stdout()),
         };
 
-        if pager.kind == PagerKind::Bat {
+        // PERBAIKAN DI SINI: Bat -> Kit
+        if pager.kind == PagerKind::Kit {
             return Err(Error::InvalidPagerValueKit);
         }
 
