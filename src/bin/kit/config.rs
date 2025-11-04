@@ -139,9 +139,9 @@ fn get_args_from_str(content: &str) -> Result<Vec<OsString>, shell_words::ParseE
 pub fn get_args_from_env_vars() -> Vec<OsString> {
     [
         ("--tabs", "KIT_TABS"),
-        ("--theme", kit::theme::env::BAT_THEME),
-        ("--theme-dark", kit::theme::env::BAT_THEME_DARK),
-        ("--theme-light", kit::theme::env::BAT_THEME_LIGHT),
+        ("--theme", kit::theme::env::KIT_THEME),
+        ("--theme-dark", kit::theme::env::KIT_THEME_DARK),
+        ("--theme-light", kit::theme::env::KIT_THEME_LIGHT),
         ("--pager", "KIT_PAGER"),
         ("--paging", "KIT_PAGING"),
         ("--style", "KIT_STYLE"),
