@@ -24,8 +24,8 @@ pub enum Error {
     UnknownSyntax(String),
     #[error("Unknown style '{0}'")]
     UnknownStyle(String),
-    #[error("Use of bat as a pager is disallowed in order to avoid infinite recursion problems")]
-    InvalidPagerValueBat,
+    #[error("Use of kit as a pager is disallowed in order to avoid infinite recursion problems")]
+    InvalidPagerValueKit,
     #[error("{0}")]
     Msg(String),
     #[cfg(feature = "paging")]
@@ -64,7 +64,7 @@ pub fn default_error_handler(error: &Error, output: &mut dyn Write) {
             writeln!(
                 output,
                 "{}: Error while parsing metadata.yaml file: {error}",
-                Red.paint("[bat error]"),
+                Red.paint("[kit error]"),
             )
             .ok();
         }
@@ -72,7 +72,7 @@ pub fn default_error_handler(error: &Error, output: &mut dyn Write) {
             writeln!(
                 &mut std::io::stderr().lock(),
                 "{}: {error}",
-                Red.paint("[bat error]"),
+                Red.paint("[kit error]"),
             )
             .ok();
         }

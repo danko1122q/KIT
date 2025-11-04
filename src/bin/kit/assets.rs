@@ -5,9 +5,9 @@ use std::path::PathBuf;
 
 use clap::crate_version;
 
-use bat::assets::HighlightingAssets;
-use bat::assets_metadata::AssetsMetadata;
-use bat::error::*;
+use kit::assets::HighlightingAssets;
+use kit::assets_metadata::AssetsMetadata;
+use kit::error::*;
 
 pub fn clear_assets(cache_dir: &Path) {
     clear_asset(cache_dir.join("themes.bin"), "theme set cache");
@@ -23,11 +23,11 @@ pub fn assets_from_cache_or_binary(
         if !metadata.is_compatible_with(crate_version!()) {
             return Err(format!(
                 "The binary caches for the user-customized syntaxes and themes \
-                 in '{}' are not compatible with this version of bat ({}). To solve this, \
-                 either rebuild the cache (bat cache --build) or remove \
-                 the custom syntaxes/themes (bat cache --clear).\n\
+                 in '{}' are not compatible with this version of kit ({}). To solve this, \
+                 either rebuild the cache (kit cache --build) or remove \
+                 the custom syntaxes/themes (kit cache --clear).\n\
                  For more information, see:\n\n  \
-                 https://github.com/sharkdp/bat#adding-new-syntaxes--language-definitions",
+                 https://github.com/danko1122q/kit",
                 cache_dir.to_string_lossy(),
                 crate_version!()
             )

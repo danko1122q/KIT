@@ -1,4 +1,4 @@
-use bat::style::StyleComponentList;
+use kit::style::StyleComponentList;
 use clap::{
     crate_name, crate_version, value_parser, Arg, ArgAction, ArgGroup, ColorChoice, Command,
 };
@@ -60,7 +60,6 @@ pub fn build_app(interactive_output: bool) -> Command {
         )
         .arg(
             Arg::new("mkdir")
-                .short('m')
                 .long("mk")
                 .value_name("DIR")
                 .num_args(1..)
@@ -68,7 +67,7 @@ pub fn build_app(interactive_output: bool) -> Command {
                 .conflicts_with("FILE")
                 .conflicts_with("create")
                 .help("Create new directory/directories recursively.")
-                .long_help("Create one or more new directories recursively (like 'mkdir -p'). This will create all parent directories as needed."),
+                .long_help("Create one or more new directories recursively (like 'mkdir -p'). Use: kit --mk <folder_name>"),
         )
         .arg(
             Arg::new("show-all")
@@ -169,7 +168,7 @@ pub fn build_app(interactive_output: bool) -> Command {
                 .help("Specify the name to display for a file.")
                 .long_help(
                     "Specify the name to display for a file. Useful when piping \
-                     data to bat from STDIN when bat does not otherwise know \
+                     data to kit from STDIN when kit does not otherwise know \
                      the filename. Note that the provided file name is also \
                      used for syntax detection.",
                 ),
@@ -337,7 +336,7 @@ pub fn build_app(interactive_output: bool) -> Command {
                 .overrides_with("force-colorization")
                 .hide_short_help(true)
                 .long_help("Alias for '--decorations=always --color=always'. This is useful \
-                        if the output of bat is piped to another program, but you want \
+                        if the output of kit is piped to another program, but you want \
                         to keep the colorization/decorations.")
         )
         .arg(
@@ -385,7 +384,6 @@ pub fn build_app(interactive_output: bool) -> Command {
         )
         .arg(
             Arg::new("map-syntax")
-                .short('m')
                 .long("map-syntax")
                 .action(ArgAction::Append)
                 .value_name("glob:syntax")
@@ -393,8 +391,8 @@ pub fn build_app(interactive_output: bool) -> Command {
                 .long_help(
                     "Map a glob pattern to an existing syntax name. The glob pattern is matched \
                      on the full path and the filename. For example, to highlight *.build files \
-                     with the Python syntax, use -m '*.build:Python'. To highlight files named \
-                     '.myignore' with the Git Ignore syntax, use -m '.myignore:Git Ignore'. Note \
+                     with the Python syntax, use --map-syntax '*.build:Python'. To highlight files named \
+                     '.myignore' with the Git Ignore syntax, use --map-syntax '.myignore:Git Ignore'. Note \
                      that the right-hand side is the *name* of the syntax, not a file extension.",
                 )
         )
@@ -405,7 +403,7 @@ pub fn build_app(interactive_output: bool) -> Command {
                 .hide_short_help(true)
                 .help(
                     "Ignore extension. For example:\n  \
-                    'bat --ignored-suffix \".dev\" my_file.json.dev' will use JSON syntax, and ignore '.dev'"
+                    'kit --ignored-suffix \".dev\" my_file.json.dev' will use JSON syntax, and ignore '.dev'"
                 )
         )
         .arg(
@@ -647,14 +645,14 @@ pub fn build_app(interactive_output: bool) -> Command {
                 .long("config-dir")
                 .action(ArgAction::SetTrue)
                 .hide(true)
-                .help("Show bat's configuration directory."),
+                .help("Show kit's configuration directory."),
         )
         .arg(
             Arg::new("cache-dir")
                 .long("cache-dir")
                 .action(ArgAction::SetTrue)
                 .hide(true)
-                .help("Show bat's cache directory."),
+                .help("Show kit's cache directory."),
         )
         .arg(
             Arg::new("diagnostic")
@@ -680,7 +678,7 @@ pub fn build_app(interactive_output: bool) -> Command {
         );
 
     // Check if the current directory contains a file name cache. Otherwise,
-    // enable the 'bat cache' subcommand.
+    // enable the 'kit cache' subcommand.
     if Path::new("cache").exists() {
         app
     } else {
@@ -746,8 +744,8 @@ pub fn build_app(interactive_output: bool) -> Command {
                 ),
         )
         .after_long_help(
-            "You can use 'bat cache' to customize syntaxes and themes. \
-            See 'bat cache --help' for more information",
+            "You can use 'kit cache' to customize syntaxes and themes. \
+            See 'kit cache --help' for more information",
         )
     }
 }

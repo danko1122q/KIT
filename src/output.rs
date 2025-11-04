@@ -95,7 +95,7 @@ impl OutputType {
         };
 
         if pager.kind == PagerKind::Bat {
-            return Err(Error::InvalidPagerValueBat);
+            return Err(Error::InvalidPagerValueKit);
         }
 
         if pager.kind == PagerKind::Builtin {

@@ -9,16 +9,16 @@ use crate::{
     clap_app,
     config::{get_args_from_config_file, get_args_from_env_opts_var, get_args_from_env_vars},
 };
-use bat::style::StyleComponentList;
-use bat::theme::{theme, ThemeName, ThemeOptions, ThemePreference};
-use bat::BinaryBehavior;
-use bat::StripAnsiMode;
+use kit::style::StyleComponentList;
+use kit::theme::{theme, ThemeName, ThemeOptions, ThemePreference};
+use kit::BinaryBehavior;
+use kit::StripAnsiMode;
 use clap::ArgMatches;
 
 use console::Term;
 
 use crate::input::{new_file_input, new_stdin_input};
-use bat::{
+use kit::{
     bat_warning,
     config::{Config, VisibleLines},
     error::*,
@@ -177,7 +177,7 @@ impl App {
 
         if let Some(values) = self.matches.get_many::<String>("map-syntax") {
             // later args take precedence over earlier ones, hence `.rev()`
-            // see: https://github.com/sharkdp/bat/pull/2755#discussion_r1456416875
+            // see: https://github.com/danko1122q/kit/pull/1
             for from_to in values.rev() {
                 let parts: Vec<_> = from_to.split(':').collect();
 

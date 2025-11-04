@@ -17,8 +17,8 @@ use std::io::{BufReader, Write};
 use std::path::Path;
 use std::process;
 
-use bat::output::OutputType;
-use bat::theme::DetectColorScheme;
+use kit::output::OutputType;
+use kit::theme::DetectColorScheme;
 use nu_ansi_term::Color::Green;
 use nu_ansi_term::Style;
 
@@ -34,7 +34,7 @@ use assets::{assets_from_cache_or_binary, clear_assets};
 use directories::PROJECT_DIRS;
 use globset::GlobMatcher;
 
-use bat::{
+use kit::{
     config::Config,
     controller::Controller,
     error::*,
@@ -53,7 +53,7 @@ fn build_assets(matches: &clap::ArgMatches, config_dir: &Path, cache_dir: &Path)
         .map(Path::new)
         .unwrap_or_else(|| config_dir);
 
-    bat::assets::build(
+    kit::assets::build(
         source_dir,
         !matches.get_flag("blank"),
         matches.get_flag("acknowledgements"),
@@ -262,7 +262,7 @@ fn set_terminal_title_to(new_terminal_title: String) {
 }
 
 fn get_new_terminal_title(inputs: &Vec<Input>) -> String {
-    let mut new_terminal_title = "bat: ".to_string();
+    let mut new_terminal_title = "kit: ".to_string();
     for (index, input) in inputs.iter().enumerate() {
         new_terminal_title += input.description().title();
         if index < inputs.len() - 1 {
@@ -284,7 +284,7 @@ fn run_controller(inputs: Vec<Input>, config: &Config, cache_dir: &Path) -> Resu
 #[cfg(feature = "bugreport")]
 fn invoke_bugreport(app: &App, cache_dir: &Path) {
     use bugreport::{bugreport, collector::*, format::Markdown};
-    let pager = bat::config::get_pager_executable(
+    let pager = kit::config::get_pager_executable(
         app.matches.get_one::<String>("pager").map(|s| s.as_str()),
     )
     .unwrap_or_else(|| "less".to_owned()); // FIXME: Avoid non-canonical path to "less".
@@ -414,7 +414,7 @@ fn run() -> Result<bool> {
                 writeln!(io::stdout(), "{}", cache_dir.to_string_lossy())?;
                 Ok(true)
             } else if app.matches.get_flag("acknowledgements") {
-                writeln!(io::stdout(), "{}", bat::assets::get_acknowledgements())?;
+                writeln!(io::stdout(), "{}", kit::assets::get_acknowledgements())?;
                 Ok(true)
             } else if let Some(files) = app.matches.get_many::<std::path::PathBuf>("create") {
                 let mut all_success = true;

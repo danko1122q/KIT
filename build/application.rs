@@ -2,7 +2,7 @@ use std::{env, fs, path::PathBuf};
 
 use crate::util::render_template;
 
-/// Generate manpage and shell completions for the bat application.
+/// Generate manpage and shell completions for the kit application.
 pub fn gen_man_and_comp() -> anyhow::Result<()> {
     println!("cargo:rerun-if-changed=assets/manual/");
     println!("cargo:rerun-if-changed=assets/completions/");
@@ -13,7 +13,7 @@ pub fn gen_man_and_comp() -> anyhow::Result<()> {
     println!("cargo:rerun-if-env-changed=BAT_ASSETS_GEN_DIR");
 
     // Read environment variables.
-    let project_name = env::var("PROJECT_NAME").unwrap_or("bat".into());
+    let project_name = env::var("PROJECT_NAME").unwrap_or("kit".into());
     let executable_name = env::var("PROJECT_EXECUTABLE").unwrap_or(project_name.clone());
     let executable_name_uppercase = executable_name.to_uppercase();
     let project_version = env::var("CARGO_PKG_VERSION")?;
@@ -39,45 +39,45 @@ pub fn gen_man_and_comp() -> anyhow::Result<()> {
 
     render_template(
         &variables,
-        "assets/manual/bat.1.in",
-        out_dir.join("assets/manual/bat.1"),
+        "assets/manual/kit.1.in",
+        out_dir.join("assets/manual/kit.1"),
     )?;
     render_template(
         &variables,
-        "assets/completions/bat.bash.in",
-        out_dir.join("assets/completions/bat.bash"),
+        "assets/completions/kit.bash.in",
+        out_dir.join("assets/completions/kit.bash"),
     )?;
     render_template(
         &variables,
-        "assets/completions/bat.fish.in",
-        out_dir.join("assets/completions/bat.fish"),
+        "assets/completions/kit.fish.in",
+        out_dir.join("assets/completions/kit.fish"),
     )?;
     render_template(
         &variables,
-        "assets/completions/_bat.ps1.in",
-        out_dir.join("assets/completions/_bat.ps1"),
+        "assets/completions/_kit.ps1.in",
+        out_dir.join("assets/completions/_kit.ps1"),
     )?;
     render_template(
         &variables,
-        "assets/completions/bat.zsh.in",
-        out_dir.join("assets/completions/bat.zsh"),
+        "assets/completions/kit.zsh.in",
+        out_dir.join("assets/completions/kit.zsh"),
     )?;
 
     println!(
         "cargo:rustc-env=BAT_GENERATED_COMPLETION_BASH={}",
-        out_dir.join("assets/completions/bat.bash").display()
+        out_dir.join("assets/completions/kit.bash").display()
     );
     println!(
         "cargo:rustc-env=BAT_GENERATED_COMPLETION_FISH={}",
-        out_dir.join("assets/completions/bat.fish").display()
+        out_dir.join("assets/completions/kit.fish").display()
     );
     println!(
         "cargo:rustc-env=BAT_GENERATED_COMPLETION_PS1={}",
-        out_dir.join("assets/completions/_bat.ps1").display()
+        out_dir.join("assets/completions/_kit.ps1").display()
     );
     println!(
         "cargo:rustc-env=BAT_GENERATED_COMPLETION_ZSH={}",
-        out_dir.join("assets/completions/bat.zsh").display()
+        out_dir.join("assets/completions/kit.zsh").display()
     );
 
     Ok(())

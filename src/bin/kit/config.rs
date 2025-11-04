@@ -29,7 +29,7 @@ pub fn config_file() -> PathBuf {
         .unwrap_or_else(|| PROJECT_DIRS.config_dir().join("config"))
 }
 
-pub fn generate_config_file() -> bat::error::Result<()> {
+pub fn generate_config_file() -> kit::error::Result<()> {
     let config_file = config_file();
     if config_file.is_file() {
         println!(
@@ -139,9 +139,9 @@ fn get_args_from_str(content: &str) -> Result<Vec<OsString>, shell_words::ParseE
 pub fn get_args_from_env_vars() -> Vec<OsString> {
     [
         ("--tabs", "KIT_TABS"),
-        ("--theme", bat::theme::env::BAT_THEME),
-        ("--theme-dark", bat::theme::env::BAT_THEME_DARK),
-        ("--theme-light", bat::theme::env::BAT_THEME_LIGHT),
+        ("--theme", kit::theme::env::BAT_THEME),
+        ("--theme-dark", kit::theme::env::BAT_THEME_DARK),
+        ("--theme-light", kit::theme::env::BAT_THEME_LIGHT),
         ("--pager", "KIT_PAGER"),
         ("--paging", "KIT_PAGING"),
         ("--style", "KIT_STYLE"),

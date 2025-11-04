@@ -1,4 +1,4 @@
-//! `bat` is a library to print syntax highlighted content.
+//! `kit` is a library to print syntax highlighted content.
 //!
 //! The main struct of this crate is `PrettyPrinter` which can be used to
 //! configure and run the syntax highlighting.
@@ -10,7 +10,7 @@
 //!
 //! "Hello world" example:
 //! ```
-//! use bat::PrettyPrinter;
+//! use kit::PrettyPrinter;
 //!
 //! PrettyPrinter::new()
 //!     .input_from_bytes(b"<span style=\"color: #ff00cc\">Hello world!</span>\n")
