@@ -19,7 +19,7 @@ use console::Term;
 
 use crate::input::{new_file_input, new_stdin_input};
 use kit::{
-    bat_warning,
+    kit_warning,
     config::{Config, VisibleLines},
     error::*,
     input::Input,
@@ -71,7 +71,7 @@ impl App {
 
             wild::args_os().collect::<Vec<_>>()
         } else if wild::args_os().any(|arg| arg == "--no-config") || should_skip_config {
-            // Skip the arguments in bats config file when --no-config is present
+            // Skip the arguments in kits config file when --no-config is present
             // or when user requests help, version, or diagnostic information
 
             let mut cli_args = wild::args_os();
@@ -92,7 +92,7 @@ impl App {
         } else {
             let mut cli_args = wild::args_os();
 
-            // Read arguments from bats config file
+            // Read arguments from kits config file
             let mut args = get_args_from_env_opts_var()
                 .unwrap_or_else(get_args_from_config_file)
                 .map_err(|_| "Could not parse configuration file")?;
@@ -455,7 +455,7 @@ impl App {
 
         // If `grid` is set, remove `rule` as it is a subset of `grid`, and print a warning.
         if styled_components.grid() && styled_components.0.remove(&StyleComponent::Rule) {
-            bat_warning!("Style 'rule' is a subset of style 'grid', 'rule' will not be visible.");
+            kit_warning!("Style 'rule' is a subset of style 'grid', 'rule' will not be visible.");
         }
 
         Ok(styled_components)
