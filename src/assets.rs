@@ -14,7 +14,7 @@ use crate::input::{InputReader, OpenedInput};
 use crate::syntax_mapping::ignored_suffixes::IgnoredSuffixes;
 use crate::syntax_mapping::MappingTarget;
 use crate::theme::{default_theme, ColorScheme};
-use crate::{bat_warning, SyntaxMapping};
+use crate::{kit_warning, SyntaxMapping};
 
 use lazy_theme_set::LazyThemeSet;
 
@@ -195,7 +195,7 @@ impl HighlightingAssets {
                     return self.get_theme("ansi");
                 }
                 if !theme.is_empty() {
-                    bat_warning!("Unknown theme '{theme}', using default.")
+                    kit_warning!("Unknown theme '{theme}', using default.")
                 }
                 self.get_theme_set()
                     .get(
