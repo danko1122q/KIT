@@ -1,7 +1,7 @@
 [package]
 authors = ["Davanico A.N <davaniko1122@gmail.com>"]
 categories = ["command-line-utilities"]
-description = "A cat(1) clone with wings."
+description = "A bat clone with wings."
 homepage = "https://github.com/danko1122q/kit"
 license = "MIT OR Apache-2.0"
 name = "kit"
