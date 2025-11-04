@@ -1,6 +1,6 @@
-# Changelog Kit
+# Kit Changelog
 
-Semua perubahan penting pada Kit tercatat di sini. Format ini mengikuti Keep a Changelog dan Semantic Versioning.
+All significant changes to Kit are documented here. This format follows Keep a Changelog and Semantic Versioning.
 
 ---
 
@@ -8,41 +8,41 @@ Semua perubahan penting pada Kit tercatat di sini. Format ini mengikuti Keep a C
 
 ### 🚀 Initial Stable Release
 
-Rilis stabil pertama Kit, utilitas CLI serbaguna yang cepat dan dapat disesuaikan.
+The first stable release of Kit, a versatile, fast, and customizable CLI utility.
 **Author:** danko1122q
 
-### ✨ Added (Fitur Baru)
+### ✨ Added (New Features)
 
-* **Syntax Highlighting:** Dukungan untuk lebih dari 200 bahasa pemrograman dan markup menggunakan syntect.
+* **Syntax Highlighting:**
 * **File Viewing & Paging:**
 
-  * Tampilan berkas dengan penomoran baris dan integrasi Git di sidebar.
-  * Paging otomatis untuk berkas besar dengan dukungan pager kustom.
+  * File display with line numbering and Git integration in the sidebar.
+  * Automatic paging for large files with customizable pager support.
 * **File Management:**
 
-  * Membuat berkas dengan flag `-c` / `--create` (mirip `touch`).
-  * Membuat direktori rekursif dengan flag `--mkdir` (mirip `mkdir -p`).
-* **Git Integration:** Menampilkan modifikasi dan perubahan berkas di sidebar.
+  * File creation using the `-c` / `--create` flag (similar to `touch`).
+  * Recursive directory creation using the `--mkdir` flag (similar to `mkdir -p`).
+* **Git Integration:** Shows file modifications and changes directly in the sidebar.
 * **Customization & Configuration:**
 
-  * Dukungan penuh untuk berkas konfigurasi.
-  * Custom syntax mapping untuk pola berkas tertentu.
-  * Tema warna siap pakai untuk berbagai latar belakang terminal.
+  * Full support for configuration files.
+  * Custom syntax mappings for specific file patterns.
+  * Ready-to-use color themes for various terminal backgrounds.
 
 ### ⚙️ Configuration & Environment
 
-* Direktori standar:
+* Default directories:
 
-  * Konfigurasi: `~/.config/kit`
+  * Configuration: `~/.config/kit`
   * Cache: `~/.cache/kit`
-* Variabel lingkungan:
+* Environment variables:
 
   * `KIT_THEME`, `KIT_STYLE`, `KIT_PAGER`, `KIT_PAGING`, `KIT_TABS`
-  * `KIT_CONFIG_PATH`, `KIT_CACHE_PATH` untuk lokasi berkas kustom
+  * `KIT_CONFIG_PATH`, `KIT_CACHE_PATH` for custom file locations
 
 ### 📦 Technical Details
 
 * Language: Rust (Edition 2021)
 * Minimum Rust Version: 1.70
 * License: MIT OR Apache-2.0
-* Copyright: © 2025 danko1122q. Semua hak dilindungi undang-undang.
+* Copyright: © 2025 danko1122q. All rights reserved.
