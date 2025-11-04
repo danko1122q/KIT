@@ -244,9 +244,9 @@ pub fn list_themes(
         writeln!(
             writer,
             "Further themes can be installed to '{}', \
-            and are added to the cache with `bat cache --build`. \
+            and are added to the cache with `kit cache --build`. \
             For more information, see:\n\n  \
-            https://github.com/sharkdp/bat#adding-new-themes",
+            https://github.com/danko1122q/kit#adding-new-themes",
             config_dir.join("themes").to_string_lossy()
         )?;
     }
