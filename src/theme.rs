@@ -8,11 +8,11 @@ use std::str::FromStr;
 /// Environment variable names.
 pub mod env {
     /// See [`crate::theme::ThemeOptions::theme`].
-    pub const BAT_THEME: &str = "BAT_THEME";
+    pub const KIT_THEME: &str = "KIT_THEME";
     /// See [`crate::theme::ThemeOptions::theme_dark`].
-    pub const BAT_THEME_DARK: &str = "BAT_THEME_DARK";
+    pub const KIT_THEME_DARK: &str = "KIT_THEME_DARK";
     /// See [`crate::theme::ThemeOptions::theme_light`].
-    pub const BAT_THEME_LIGHT: &str = "BAT_THEME_LIGHT";
+    pub const KIT_THEME_LIGHT: &str = "KIT_THEME_LIGHT";
 }
 
 /// Chooses an appropriate theme or falls back to a default theme
@@ -45,21 +45,21 @@ pub fn color_scheme(when: DetectColorScheme) -> Option<ColorScheme> {
 pub struct ThemeOptions {
     /// Configures how the theme is chosen. If set to a [`ThemePreference::Fixed`] value,
     /// then the given theme is used regardless of the terminal's background color.
-    /// This corresponds with the `BAT_THEME` environment variable and the `--theme` option.
+    /// This corresponds with the `KIT_THEME` environment variable and the `--theme` option.
     pub theme: ThemePreference,
     /// The theme to use in case the terminal uses a dark background with light text.
-    /// This corresponds with the `BAT_THEME_DARK` environment variable and the `--theme-dark` option.
+    /// This corresponds with the `KIT_THEME_DARK` environment variable and the `--theme-dark` option.
     pub theme_dark: Option<ThemeName>,
     /// The theme to use in case the terminal uses a light background with dark text.
-    /// This corresponds with the `BAT_THEME_LIGHT` environment variable and the `--theme-light` option.
+    /// This corresponds with the `KIT_THEME_LIGHT` environment variable and the `--theme-light` option.
     pub theme_light: Option<ThemeName>,
 }
 
-/// What theme should `bat` use?
+/// What theme should `kit` use?
 ///
 /// The easiest way to construct this is from a string:
 /// ```
-/// # use bat::theme::{ThemePreference, DetectColorScheme};
+/// # use kit::theme::{ThemePreference, DetectColorScheme};
 /// let preference = ThemePreference::new("auto:system");
 /// assert_eq!(ThemePreference::Auto(DetectColorScheme::System), preference);
 /// ```
@@ -123,7 +123,7 @@ impl fmt::Display for ThemePreference {
 /// The name of a theme or the default theme.
 ///
 /// ```
-/// # use bat::theme::ThemeName;
+/// # use kit::theme::ThemeName;
 /// assert_eq!(ThemeName::Default, ThemeName::new("default"));
 /// assert_eq!(ThemeName::Named("example".to_string()), ThemeName::new("example"));
 /// ```
@@ -259,7 +259,7 @@ impl ColorSchemeDetector for TerminalColorSchemeDetector {
         // same terminal as us.
         //
         // This is usually only an issue when the output is manually piped to a pager.
-        // For example: `bat Cargo.toml | less`.
+        // For example: `kit Cargo.toml | less`.
         // Otherwise, if we start the pager ourselves, then there's no race condition
         // since the pager is started *after* the color is detected.
         std::io::stdout().is_terminal()
@@ -276,7 +276,7 @@ impl ColorSchemeDetector for TerminalColorSchemeDetector {
 
 #[cfg(not(target_os = "macos"))]
 fn color_scheme_from_system() -> Option<ColorScheme> {
-    crate::bat_warning!(
+    crate::kit_warning!(
         "Theme 'auto:system' is only supported on macOS, \
         using default."
     );
@@ -416,7 +416,7 @@ mod tests {
         }
 
         // For backwards compatibility, if the default theme is requested
-        // explicitly through BAT_THEME, we always pick the default dark theme.
+        // explicitly through KIT_THEME, we always pick the default dark theme.
         #[test]
         fn default_dark_if_requested_explicitly_through_theme() {
             for color_scheme in optional(color_schemes()) {
