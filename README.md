@@ -49,13 +49,13 @@ kit -c file1.txt file2.md file3.rs
 ### Create Directories
 ```bash
 # Create a directory
-kit --mkdir mydir
+kit --mk mydir
 
 # Create nested directories (like mkdir -p)
-kit --mkdir path/to/nested/directory
+kit --mk path/to/nested/directory
 
 # Create multiple directories
-kit --mkdir dir1 dir2 dir3
+kit --mk dir1 dir2 dir3
 ```
 
 ### Additional Options
