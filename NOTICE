@@ -1,4 +1,18 @@
-Kit - A versatile file utility with syntax highlighting
-Copyright (c) 2025
+NOTICE
 
-This is a rebrand of the bat project.
+Project kit - Copyright (c) 2023-2025 danko1122q
+
+This project, 'kit', is a derivative work based on the 'bat' utility.
+
+Original Work (bat utility):
+-----------------------------
+Copyright (c) 2018-2021 bat-developers (https://github.com/sharkdp/bat).
+
+The original 'bat' utility was made available under the terms of either the MIT License or the Apache License 2.0, at the option of the user.
+
+Current Licensing:
+------------------
+The 'kit' project, including all modifications and additions, is licensed to you under the terms of the **Apache License, Version 2.0**.
+(Note: You must replace 'Apache License, Version 2.0' with 'MIT License' if you decide to use MIT for 'kit'.)
+
+You should have received a copy of the Apache License 2.0 in the LICENSE file distributed with this work.
