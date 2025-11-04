@@ -1,52 +1,48 @@
-# Changelog
+# Changelog Kit
 
-All notable changes to Kit will be documented in this file.
+Semua perubahan penting pada Kit tercatat di sini. Format ini mengikuti Keep a Changelog dan Semantic Versioning.
 
-## v1.0.0 - 2025-01-04
+---
 
-### 🎉 Initial Release
+## [1.0.0] - 2025-01-04
 
-**Author**: danko1122q <davaniko1122@gmail.com>
+### 🚀 Initial Stable Release
 
-First stable release of **Kit** - a versatile file utility with powerful features.
+Rilis stabil pertama Kit, utilitas CLI serbaguna yang cepat dan dapat disesuaikan.
+**Author:** danko1122q
 
-### ✨ Features
+### ✨ Added (Fitur Baru)
 
-- **Syntax Highlighting**: Beautiful syntax highlighting for 200+ programming and markup languages
-- **File Viewing**: Advanced file viewing with line numbers, Git integration, and customizable themes
-- **File Creation**: Create files with `-c` / `--create` flag (similar to touch command)
-- **Directory Creation**: Create directories recursively with `--mkdir` flag (like mkdir -p)
-- **Git Integration**: Shows file modifications and changes in the sidebar
-- **Automatic Paging**: Smart paging for large files with customizable pager support
-- **Theme Support**: Multiple color themes for different terminal backgrounds
-- **Custom Syntax Mappings**: Map file patterns to specific syntaxes
-- **Configuration Files**: Full configuration file support for persistent settings
+* **Syntax Highlighting:** Dukungan untuk lebih dari 200 bahasa pemrograman dan markup menggunakan syntect.
+* **File Viewing & Paging:**
 
-### 🎨 Customization
+  * Tampilan berkas dengan penomoran baris dan integrasi Git di sidebar.
+  * Paging otomatis untuk berkas besar dengan dukungan pager kustom.
+* **File Management:**
 
-- Environment variables for easy configuration:
-  - `KIT_THEME`: Set default theme
-  - `KIT_STYLE`: Set default style components  
-  - `KIT_PAGER`: Set default pager
-  - `KIT_PAGING`: Control paging behavior
-  - `KIT_TABS`: Set tab width
-  - `KIT_CONFIG_PATH`: Custom config file location
-  - `KIT_CACHE_PATH`: Custom cache directory
+  * Membuat berkas dengan flag `-c` / `--create` (mirip `touch`).
+  * Membuat direktori rekursif dengan flag `--mkdir` (mirip `mkdir -p`).
+* **Git Integration:** Menampilkan modifikasi dan perubahan berkas di sidebar.
+* **Customization & Configuration:**
 
-- Configuration directory: `~/.config/kit`
-- Cache directory: `~/.cache/kit`
+  * Dukungan penuh untuk berkas konfigurasi.
+  * Custom syntax mapping untuk pola berkas tertentu.
+  * Tema warna siap pakai untuk berbagai latar belakang terminal.
 
-### 📝 Copyright
+### ⚙️ Configuration & Environment
 
-Copyright © 2025 danko1122q. All rights reserved.
+* Direktori standar:
+
+  * Konfigurasi: `~/.config/kit`
+  * Cache: `~/.cache/kit`
+* Variabel lingkungan:
+
+  * `KIT_THEME`, `KIT_STYLE`, `KIT_PAGER`, `KIT_PAGING`, `KIT_TABS`
+  * `KIT_CONFIG_PATH`, `KIT_CACHE_PATH` untuk lokasi berkas kustom
 
 ### 📦 Technical Details
 
-- Language: Rust
-- Edition: 2021
-- Minimum Rust Version: 1.70
-- License: MIT OR Apache-2.0
-
-### 🙏 Acknowledgments
-
-Built with Rust and powered by syntect for syntax highlighting.
+* Language: Rust (Edition 2021)
+* Minimum Rust Version: 1.70
+* License: MIT OR Apache-2.0
+* Copyright: © 2025 danko1122q. Semua hak dilindungi undang-undang.
