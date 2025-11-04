@@ -35,8 +35,8 @@ pub fn build_app(interactive_output: bool) -> Command {
         .allow_external_subcommands(true)
         .disable_help_subcommand(true)
         .max_term_width(100)
-        .about("A cat(1) clone with wings.")
-        .long_about("A cat(1) clone with syntax highlighting and Git integration.")
+        .about("Kit - a versatile file utility tool with syntax highlighting.")
+        .long_about("Kit is a versatile file utility with syntax highlighting, Git integration, and file/directory creation capabilities.")
         .arg(
             Arg::new("FILE")
                 .help("File(s) to print / concatenate. Use '-' for standard input.")
@@ -46,6 +46,28 @@ pub fn build_app(interactive_output: bool) -> Command {
                 )
                 .num_args(1..)
                 .value_parser(value_parser!(PathBuf)),
+        )
+        .arg(
+            Arg::new("create")
+                .short('c')
+                .long("create")
+                .value_name("FILE")
+                .num_args(1..)
+                .value_parser(value_parser!(PathBuf))
+                .conflicts_with("FILE")
+                .help("Create new file(s).")
+                .long_help("Create one or more new files. Similar to 'touch' command."),
+        )
+        .arg(
+            Arg::new("mkdir")
+                .long("mkdir")
+                .value_name("DIR")
+                .num_args(1..)
+                .value_parser(value_parser!(PathBuf))
+                .conflicts_with("FILE")
+                .conflicts_with("create")
+                .help("Create new directory/directories.")
+                .long_help("Create one or more new directories recursively. Similar to 'mkdir -p' command."),
         )
         .arg(
             Arg::new("show-all")

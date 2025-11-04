@@ -127,6 +127,10 @@ version = "4.5.46"
 optional = true
 features = ["wrap_help", "cargo"]
 
+[[bin]]
+name = "kit"
+path = "src/bin/kit/main.rs"
+
 [profile.release]
 lto = true
 strip = true

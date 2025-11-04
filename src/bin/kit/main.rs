@@ -11,6 +11,7 @@ mod input;
 
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write as _;
+use std::fs;
 use std::io;
 use std::io::{BufReader, Write};
 use std::path::Path;
@@ -75,7 +76,7 @@ fn run_cache_subcommand(
         #[cfg(feature = "build-assets")]
         build_assets(matches, config_dir, cache_dir)?;
         #[cfg(not(feature = "build-assets"))]
-        println!("bat has been built without the 'build-assets' feature. The 'cache --build' option is not available.");
+        println!("kit has been built without the 'build-assets' feature. The 'cache --build' option is not available.");
     } else if matches.get_flag("clear") {
         clear_assets(cache_dir);
     }
@@ -348,7 +349,7 @@ fn run() -> Result<bool> {
         #[cfg(feature = "bugreport")]
         invoke_bugreport(&app, cache_dir);
         #[cfg(not(feature = "bugreport"))]
-        println!("bat has been built without the 'bugreport' feature. The '--diagnostic' option is not available.");
+        println!("kit has been built without the 'bugreport' feature. The '--diagnostic' option is not available.");
         return Ok(true);
     }
 
@@ -415,6 +416,30 @@ fn run() -> Result<bool> {
             } else if app.matches.get_flag("acknowledgements") {
                 writeln!(io::stdout(), "{}", bat::assets::get_acknowledgements())?;
                 Ok(true)
+            } else if let Some(files) = app.matches.get_many::<std::path::PathBuf>("create") {
+                let mut all_success = true;
+                for file in files {
+                    match fs::File::create(file) {
+                        Ok(_) => println!("Created file: {}", file.display()),
+                        Err(e) => {
+                            eprintln!("Error creating file '{}': {}", file.display(), e);
+                            all_success = false;
+                        }
+                    }
+                }
+                Ok(all_success)
+            } else if let Some(dirs) = app.matches.get_many::<std::path::PathBuf>("mkdir") {
+                let mut all_success = true;
+                for dir in dirs {
+                    match fs::create_dir_all(dir) {
+                        Ok(_) => println!("Created directory: {}", dir.display()),
+                        Err(e) => {
+                            eprintln!("Error creating directory '{}': {}", dir.display(), e);
+                            all_success = false;
+                        }
+                    }
+                }
+                Ok(all_success)
             } else {
                 run_controller(inputs, &config, cache_dir)
             }
