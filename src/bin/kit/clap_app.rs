@@ -60,14 +60,15 @@ pub fn build_app(interactive_output: bool) -> Command {
         )
         .arg(
             Arg::new("mkdir")
-                .long("mkdir")
+                .short('m')
+                .long("mk")
                 .value_name("DIR")
                 .num_args(1..)
                 .value_parser(value_parser!(PathBuf))
                 .conflicts_with("FILE")
                 .conflicts_with("create")
-                .help("Create new directory/directories.")
-                .long_help("Create one or more new directories recursively. Similar to 'mkdir -p' command."),
+                .help("Create new directory/directories recursively.")
+                .long_help("Create one or more new directories recursively (like 'mkdir -p'). This will create all parent directories as needed."),
         )
         .arg(
             Arg::new("show-all")
@@ -352,7 +353,7 @@ pub fn build_app(interactive_output: bool) -> Command {
                 .long_help(
                     "Specify when to use the pager. To disable the pager, use \
                     '--paging=never' or its alias,'-P'. To disable the pager permanently, \
-                    set BAT_PAGING to 'never'. To control which pager is used, see the \
+                    set KIT_PAGING to 'never'. To control which pager is used, see the \
                     '--pager' option. Possible values: *auto*, never, always."
                 ),
         )
@@ -376,7 +377,7 @@ pub fn build_app(interactive_output: bool) -> Command {
                 .help("Determine which pager to use.")
                 .long_help(
                     "Determine which pager is used. This option will override the \
-                    PAGER and BAT_PAGER environment variables. The default pager is 'less'. \
+                    PAGER and KIT_PAGER environment variables. The default pager is 'less'. \
                     If you provide '--pager=builtin', use the built-in 'minus' pager. \
                     To control when the pager is used, see the '--paging' option. \
                     Example: '--pager \"less -RF\"'."
@@ -416,8 +417,8 @@ pub fn build_app(interactive_output: bool) -> Command {
                     "Set the theme for syntax highlighting. Use '--list-themes' to \
                      see all available themes. To set a default theme, add the \
                      '--theme=\"...\"' option to the configuration file or export the \
-                     BAT_THEME environment variable (e.g.: export \
-                     BAT_THEME=\"...\").\n\n\
+                     KIT_THEME environment variable (e.g.: export \
+                     KIT_THEME=\"...\").\n\n\
                      Special values:\n\n  \
                      * auto: Picks a dark or light theme depending on the terminal's colors (default).\n          \
                      Use '--theme-light' and '--theme-dark' to customize the selected theme.\n    \
@@ -436,8 +437,8 @@ pub fn build_app(interactive_output: bool) -> Command {
                 .long_help(
                     "Sets the theme name for syntax highlighting used when the terminal uses a light background. \
                     Use '--list-themes' to see all available themes. To set a default theme, add the \
-                    '--theme-light=\"...\" option to the configuration file or export the BAT_THEME_LIGHT \
-                    environment variable (e.g. export BAT_THEME_LIGHT=\"...\")."),
+                    '--theme-light=\"...\" option to the configuration file or export the KIT_THEME_LIGHT \
+                    environment variable (e.g. export KIT_THEME_LIGHT=\"...\")."),
         )
         .arg(
             Arg::new("theme-dark")
@@ -448,8 +449,8 @@ pub fn build_app(interactive_output: bool) -> Command {
                 .long_help(
                     "Sets the theme name for syntax highlighting used when the terminal uses a dark background. \
                     Use '--list-themes' to see all available themes. To set a default theme, add the \
-                    '--theme-dark=\"...\" option to the configuration file or export the BAT_THEME_DARK \
-                    environment variable (e.g. export BAT_THEME_DARK=\"...\")."),
+                    '--theme-dark=\"...\" option to the configuration file or export the KIT_THEME_DARK \
+                    environment variable (e.g. export KIT_THEME_DARK=\"...\")."),
         )
         .arg(
             Arg::new("list-themes")
@@ -510,10 +511,10 @@ pub fn build_app(interactive_output: bool) -> Command {
                      components to display (e.g. 'numbers,changes,grid') or a \
                      pre-defined style ('full'). To set a default style, add the \
                      '--style=\"..\"' option to the configuration file or export the \
-                     BAT_STYLE environment variable (e.g.: export BAT_STYLE=\"..\").\n\n\
+                     KIT_STYLE environment variable (e.g.: export KIT_STYLE=\"..\").\n\n\
                      When styles are specified in multiple places, the \"nearest\" set \
                      of styles take precedence. The command-line arguments are the highest \
-                     priority, followed by the BAT_STYLE environment variable, and then \
+                     priority, followed by the KIT_STYLE environment variable, and then \
                      the configuration file. If any set of styles consists entirely of \
                      components prefixed with \"+\" or \"-\", it will modify the \
                      previous set of styles instead of replacing them.\n\n\

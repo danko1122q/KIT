@@ -1,4 +1,4 @@
-modules = ["rust-stable", "python-3.12", "bash"]
+modules = ["rust-stable", "python-3.12", "bash", "rust-1.87"]
 [agent]
 expertMode = true
 

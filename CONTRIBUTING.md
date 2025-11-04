@@ -1,6 +1,9 @@
-# Contributing
+# Contributing to Kit
 
-Thank you for considering to contribute to `bat`!
+Thank you for considering to contribute to **Kit**!
+
+**Author**: danko1122q <davaniko1122@gmail.com>
+**Copyright**: © 2025 danko1122q. All rights reserved.
 
 
 
@@ -13,7 +16,7 @@ changelog entry. Below are a few examples of that.
 
 Please update the changelog if your contribution contains changes regarding
 any of the following:
-  - the behavior of `bat`
+  - the behavior of `kit`
   - syntax mappings
   - syntax definitions
   - themes

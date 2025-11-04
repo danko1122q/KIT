@@ -1,22 +1,22 @@
 [package]
-authors = ["Davanico A.N <davaniko1122@gmail.com>"]
+authors = ["danko1122q <davaniko1122@gmail.com>"]
 categories = ["command-line-utilities"]
-description = "A bat clone with wings."
+description = "Kit - A versatile file utility with syntax highlighting, Git integration, and file/directory creation."
 homepage = "https://github.com/danko1122q/kit"
 license = "MIT OR Apache-2.0"
 name = "kit"
 repository = "https://github.com/danko1122q/kit"
-version = "0.26.0"
+version = "1.0.0"
 exclude = ["assets/syntaxes/*", "assets/themes/*"]
 build = "build/main.rs"
-edition = '2025'
+edition = '2021'
 # You are free to bump MSRV as soon as a reason for bumping emerges.
-rust-version = "1.87"
+rust-version = "1.70"
 
 [features]
 default = ["application", "git"]
-# Feature required for bat the application. Should be disabled when depending on
-# bat as a library.
+# Feature required for kit the application. Should be disabled when depending on
+# kit as a library.
 application = [
     "bugreport",
     "build-assets",
@@ -37,7 +37,7 @@ paging = [ "shell-words", "grep-cli", "minus"] # Support applying a pager on the
 lessopen = ["execute"] # Support $LESSOPEN preprocessor
 build-assets = ["syntect/yaml-load", "syntect/plist-load", "regex", "walkdir"]
 
-# You need to use one of these if you depend on bat as a library:
+# You need to use one of these if you depend on kit as a library:
 regex-onig = ["syntect/regex-onig"] # Use the "oniguruma" regex engine
 regex-fancy = ["syntect/regex-fancy"] # Use the rust-only "fancy-regex" engine
 

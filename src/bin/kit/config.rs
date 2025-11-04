@@ -13,17 +13,17 @@ const DEFAULT_SYSTEM_CONFIG_PREFIX: &str = "/etc";
 const DEFAULT_SYSTEM_CONFIG_PREFIX: &str = "C:\\ProgramData";
 
 pub fn system_config_file() -> PathBuf {
-    let folder = option_env!("BAT_SYSTEM_CONFIG_PREFIX").unwrap_or(DEFAULT_SYSTEM_CONFIG_PREFIX);
+    let folder = option_env!("KIT_SYSTEM_CONFIG_PREFIX").unwrap_or(DEFAULT_SYSTEM_CONFIG_PREFIX);
     let mut path = PathBuf::from(folder);
 
-    path.push("bat");
+    path.push("kit");
     path.push("config");
 
     path
 }
 
 pub fn config_file() -> PathBuf {
-    env::var("BAT_CONFIG_PATH")
+    env::var("KIT_CONFIG_PATH")
         .ok()
         .map(PathBuf::from)
         .unwrap_or_else(|| PROJECT_DIRS.config_dir().join("config"))
@@ -59,11 +59,11 @@ pub fn generate_config_file() -> bat::error::Result<()> {
         }
     }
 
-    let default_config = r#"# This is `bat`s configuration file. Each line either contains a comment or
-# a command-line option that you want to pass to `bat` by default. You can
-# run `bat --help` to get a list of all possible configuration options.
+    let default_config = r#"# This is `kit`s configuration file. Each line either contains a comment or
+# a command-line option that you want to pass to `kit` by default. You can
+# run `kit --help` to get a list of all possible configuration options.
 
-# Specify desired highlighting theme (e.g. "TwoDark"). Run `bat --list-themes`
+# Specify desired highlighting theme (e.g. "TwoDark"). Run `kit --list-themes`
 # for a list of all available themes
 #--theme="TwoDark"
 
@@ -75,7 +75,7 @@ pub fn generate_config_file() -> bat::error::Result<()> {
 #--paging=never
 
 # Uncomment the following line if you are using less version >= 551 and want to
-# enable mouse scrolling support in `bat` when running inside tmux. This might
+# enable mouse scrolling support in `kit` when running inside tmux. This might
 # disable text selection, unless you press shift.
 #--pager="less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse"
 
@@ -117,7 +117,7 @@ pub fn get_args_from_config_file() -> Result<Vec<OsString>, shell_words::ParseEr
 }
 
 pub fn get_args_from_env_opts_var() -> Option<Result<Vec<OsString>, shell_words::ParseError>> {
-    env::var("BAT_OPTS").ok().map(|s| get_args_from_str(&s))
+    env::var("KIT_OPTS").ok().map(|s| get_args_from_str(&s))
 }
 
 fn get_args_from_str(content: &str) -> Result<Vec<OsString>, shell_words::ParseError> {
@@ -138,13 +138,13 @@ fn get_args_from_str(content: &str) -> Result<Vec<OsString>, shell_words::ParseE
 
 pub fn get_args_from_env_vars() -> Vec<OsString> {
     [
-        ("--tabs", "BAT_TABS"),
+        ("--tabs", "KIT_TABS"),
         ("--theme", bat::theme::env::BAT_THEME),
         ("--theme-dark", bat::theme::env::BAT_THEME_DARK),
         ("--theme-light", bat::theme::env::BAT_THEME_LIGHT),
-        ("--pager", "BAT_PAGER"),
-        ("--paging", "BAT_PAGING"),
-        ("--style", "BAT_STYLE"),
+        ("--pager", "KIT_PAGER"),
+        ("--paging", "KIT_PAGING"),
+        ("--style", "KIT_STYLE"),
     ]
     .iter()
     .filter_map(|(flag, key)| {

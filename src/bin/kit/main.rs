@@ -297,14 +297,14 @@ fn invoke_bugreport(app: &App, cache_dir: &Path) {
         .info(OperatingSystem::default())
         .info(CommandLine::default())
         .info(EnvironmentVariables::list(&[
-            "BAT_CACHE_PATH",
-            "BAT_CONFIG_PATH",
-            "BAT_OPTS",
-            "BAT_PAGER",
-            "BAT_PAGING",
-            "BAT_STYLE",
-            "BAT_TABS",
-            "BAT_THEME",
+            "KIT_CACHE_PATH",
+            "KIT_CONFIG_PATH",
+            "KIT_OPTS",
+            "KIT_PAGER",
+            "KIT_PAGING",
+            "KIT_STYLE",
+            "KIT_TABS",
+            "KIT_THEME",
             "COLORTERM",
             "LANG",
             "LC_ALL",
