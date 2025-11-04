@@ -1,12 +1,12 @@
 %YAML 1.2
 ---
 # http://www.sublimetext.com/docs/3/syntax.html
-name: BatTestCustomAssets
+name: KitTestCustomAssets
 file_extensions:
   - battestcustomassets
 scope: source.battestcustomassets
 
-# This syntax is used to test if custom assets work with bat.
+# This syntax is used to test if custom assets work with kit.
 # The way it works is that this syntax is only allowed to be included with
 # custom assets. That way it is easy to test if custom assets are used (and works)
 # or not.
@@ -17,5 +17,5 @@ contexts:
   main:
     - match: '^([^:]+)\w*:\w*(.*)$'
       captures:
-        1: keyword.other.battestcustomassets-key
-        2: string.other.battestcustomassets-value
+        1: keyword.other.kittestcustomassets-key
+        2: string.other.kittestcustomassets-value
