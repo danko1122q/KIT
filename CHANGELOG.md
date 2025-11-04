@@ -1,7 +1,5 @@
 # Kit Changelog
 
-All significant changes to Kit are documented here. This format follows Keep a Changelog and Semantic Versioning.
-
 ---
 
 ## [1.0.0] - 2025-01-04
