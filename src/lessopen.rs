@@ -10,7 +10,7 @@ use execute::{shell, Execute};
 
 use crate::error::Result;
 use crate::{
-    bat_warning,
+    kit_warning,
     input::{Input, InputKind, InputReader, OpenedInput, OpenedInputKind},
 };
 
@@ -39,11 +39,11 @@ impl LessOpenPreprocessor {
         // Note that $LESSCLOSE has no such requirement
         if lessopen.match_indices("%s").count() != 1 {
             let error_msg = "LESSOPEN ignored: must contain exactly one %s";
-            bat_warning!("{error_msg}");
+            kit_warning!("{error_msg}");
             return Err(error_msg.into());
         }
 
-        // "||" means pipe directly to bat without making a temporary file
+        // "||" means pipe directly to kit without making a temporary file
         // Also, if preprocessor output is empty and exit code is zero, use the empty output
         // Otherwise, if output is empty and exit code is nonzero, use original file contents
         let (kind, lessopen) = if lessopen.starts_with("||") {
@@ -256,13 +256,13 @@ impl Drop for Preprocessed {
             let lessclose_output = match lessclose_command.execute_output() {
                 Ok(output) => output,
                 Err(_) => {
-                    bat_warning!("failed to run $LESSCLOSE to clean up temporary file");
+                    kit_warning!("failed to run $LESSCLOSE to clean up temporary file");
                     return;
                 }
             };
 
             if lessclose_output.status.success() {
-                bat_warning!("$LESSCLOSE exited with nonzero exit code",)
+                kit_warning!("$LESSCLOSE exited with nonzero exit code",)
             };
         }
     }
@@ -285,9 +285,9 @@ mod tests {
     #[test]
     #[serial]
     fn test_just_lessopen() -> Result<()> {
-        let preprocessor = LessOpenPreprocessor::mock_new(Some("|batpipe %s"), None)?;
+        let preprocessor = LessOpenPreprocessor::mock_new(Some("|kitpipe %s"), None)?;
 
-        assert_eq!(preprocessor.lessopen, "batpipe %s");
+        assert_eq!(preprocessor.lessopen, "kitpipe %s");
         assert!(preprocessor.lessclose.is_none());
 
         reset_env_vars();
@@ -324,45 +324,45 @@ mod tests {
     #[test]
     #[serial]
     fn test_lessopen_prefixes() -> Result<()> {
-        let preprocessor = LessOpenPreprocessor::mock_new(Some("batpipe %s"), None)?;
+        let preprocessor = LessOpenPreprocessor::mock_new(Some("kitpipe %s"), None)?;
 
-        assert_eq!(preprocessor.lessopen, "batpipe %s");
+        assert_eq!(preprocessor.lessopen, "kitpipe %s");
         assert!(matches!(preprocessor.kind, LessOpenKind::TempFile));
         assert!(!preprocessor.preprocess_stdin);
 
-        let preprocessor = LessOpenPreprocessor::mock_new(Some("|batpipe %s"), None)?;
+        let preprocessor = LessOpenPreprocessor::mock_new(Some("|kitpipe %s"), None)?;
 
-        assert_eq!(preprocessor.lessopen, "batpipe %s");
+        assert_eq!(preprocessor.lessopen, "kitpipe %s");
         assert!(matches!(
             preprocessor.kind,
             LessOpenKind::PipedIgnoreExitCode
         ));
         assert!(!preprocessor.preprocess_stdin);
 
-        let preprocessor = LessOpenPreprocessor::mock_new(Some("||batpipe %s"), None)?;
+        let preprocessor = LessOpenPreprocessor::mock_new(Some("||kitpipe %s"), None)?;
 
-        assert_eq!(preprocessor.lessopen, "batpipe %s");
+        assert_eq!(preprocessor.lessopen, "kitpipe %s");
         assert!(matches!(preprocessor.kind, LessOpenKind::Piped));
         assert!(!preprocessor.preprocess_stdin);
 
-        let preprocessor = LessOpenPreprocessor::mock_new(Some("-batpipe %s"), None)?;
+        let preprocessor = LessOpenPreprocessor::mock_new(Some("-kitpipe %s"), None)?;
 
-        assert_eq!(preprocessor.lessopen, "batpipe %s");
+        assert_eq!(preprocessor.lessopen, "kitpipe %s");
         assert!(matches!(preprocessor.kind, LessOpenKind::TempFile));
         assert!(preprocessor.preprocess_stdin);
 
-        let preprocessor = LessOpenPreprocessor::mock_new(Some("|-batpipe %s"), None)?;
+        let preprocessor = LessOpenPreprocessor::mock_new(Some("|-kitpipe %s"), None)?;
 
-        assert_eq!(preprocessor.lessopen, "batpipe %s");
+        assert_eq!(preprocessor.lessopen, "kitpipe %s");
         assert!(matches!(
             preprocessor.kind,
             LessOpenKind::PipedIgnoreExitCode
         ));
         assert!(preprocessor.preprocess_stdin);
 
-        let preprocessor = LessOpenPreprocessor::mock_new(Some("||-batpipe %s"), None)?;
+        let preprocessor = LessOpenPreprocessor::mock_new(Some("||-kitpipe %s"), None)?;
 
-        assert_eq!(preprocessor.lessopen, "batpipe %s");
+        assert_eq!(preprocessor.lessopen, "kitpipe %s");
         assert!(matches!(preprocessor.kind, LessOpenKind::Piped));
         assert!(preprocessor.preprocess_stdin);
 
