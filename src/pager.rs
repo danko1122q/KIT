@@ -7,8 +7,8 @@ pub(crate) enum PagerSource {
     /// From --config
     Config,
 
-    /// From the env var BAT_PAGER
-    EnvVarBatPager,
+    /// From the env var KIT_PAGER
+    EnvVarKitPager,
 
     /// From the env var PAGER
     EnvVarPager,
@@ -20,8 +20,8 @@ pub(crate) enum PagerSource {
 /// We know about some pagers, for example 'less'. This is a list of all pagers we know about
 #[derive(Debug, PartialEq)]
 pub(crate) enum PagerKind {
-    /// bat
-    Bat,
+    /// kit
+    Kit,
 
     /// less
     Less,
@@ -50,7 +50,7 @@ impl PagerKind {
         // Set to `less` by default on most Linux distros.
         let pager_bin = Path::new(bin).file_stem();
 
-        // The name of the current running binary. Normally `bat` but sometimes
+        // The name of the current running binary. Normally `kit` but sometimes
         // `batcat` for compatibility reasons.
         let current_bin = env::args_os().next();
 
@@ -63,7 +63,7 @@ impl PagerKind {
             Some("less") => PagerKind::Less,
             Some("more") => PagerKind::More,
             Some("most") => PagerKind::Most,
-            _ if is_current_bin_pager => PagerKind::Bat,
+            _ if is_current_bin_pager => PagerKind::Kit,
             _ => PagerKind::Unknown,
         }
     }
@@ -98,12 +98,12 @@ impl Pager {
 
 /// Returns what pager to use, after looking at both config and environment variables.
 pub(crate) fn get_pager(config_pager: Option<&str>) -> Result<Option<Pager>, ParseError> {
-    let bat_pager = env::var("BAT_PAGER");
+    let kit_pager = env::var("KIT_PAGER");
     let pager = env::var("PAGER");
 
-    let (cmd, source) = match (config_pager, &bat_pager, &pager) {
+    let (cmd, source) = match (config_pager, &kit_pager, &pager) {
         (Some(config_pager), _, _) => (config_pager, PagerSource::Config),
-        (_, Ok(bat_pager), _) => (bat_pager.as_str(), PagerSource::EnvVarBatPager),
+        (_, Ok(kit_pager), _) => (kit_pager.as_str(), PagerSource::EnvVarKitPager),
         (_, _, Ok(pager)) => (pager.as_str(), PagerSource::EnvVarPager),
         _ => ("less", PagerSource::Default),
     };
@@ -117,9 +117,9 @@ pub(crate) fn get_pager(config_pager: Option<&str>) -> Result<Option<Pager>, Par
                 // 'more' and 'most' do not supports colors; automatically use
                 // 'less' instead if the problematic pager came from the
                 // generic PAGER env var.
-                // If PAGER=bat, silently use 'less' instead to prevent
+                // If PAGER=kit, silently use 'less' instead to prevent
                 // recursion.
-                // Never silently use 'less' if BAT_PAGER or --pager has been
+                // Never silently use 'less' if KIT_PAGER or --pager has been
                 // specified.
                 matches!(kind, PagerKind::More | PagerKind::Most | PagerKind::Bat)
             } else {
