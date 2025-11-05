@@ -25,25 +25,25 @@ mod unix {
 use unix::*;
 
 mod utils;
-use utils::command::{bat, bat_with_config};
+use utils::command::{kit, kit_with_config};
 
 #[cfg(unix)]
-use utils::command::bat_raw_command;
+use utils::command::kit_raw_command;
 use utils::mocked_pagers;
 
 const EXAMPLES_DIR: &str = "tests/examples";
 
 fn get_config() -> &'static str {
     if cfg!(windows) {
-        "bat-windows.conf"
+        "kit-windows.conf"
     } else {
-        "bat.conf"
+        "kit.conf"
     }
 }
 
 #[test]
 fn basic() {
-    bat()
+    kit()
         .arg("test.txt")
         .assert()
         .success()
@@ -53,7 +53,7 @@ fn basic() {
 
 #[test]
 fn stdin() {
-    bat()
+    kit()
         .write_stdin("foo\nbar\n")
         .assert()
         .success()
@@ -62,7 +62,7 @@ fn stdin() {
 
 #[test]
 fn concatenate() {
-    bat()
+    kit()
         .arg("test.txt")
         .arg("test.txt")
         .assert()
@@ -72,7 +72,7 @@ fn concatenate() {
 
 #[test]
 fn concatenate_stdin() {
-    bat()
+    kit()
         .arg("test.txt")
         .arg("-")
         .arg("test.txt")
@@ -84,7 +84,7 @@ fn concatenate_stdin() {
 
 #[test]
 fn concatenate_empty_first() {
-    bat()
+    kit()
         .arg("empty.txt")
         .arg("test.txt")
         .assert()
@@ -94,7 +94,7 @@ fn concatenate_empty_first() {
 
 #[test]
 fn concatenate_empty_last() {
-    bat()
+    kit()
         .arg("test.txt")
         .arg("empty.txt")
         .assert()
@@ -104,7 +104,7 @@ fn concatenate_empty_last() {
 
 #[test]
 fn concatenate_empty_both() {
-    bat()
+    kit()
         .arg("empty.txt")
         .arg("empty.txt")
         .assert()
@@ -114,7 +114,7 @@ fn concatenate_empty_both() {
 
 #[test]
 fn concatenate_empty_between() {
-    bat()
+    kit()
         .arg("test.txt")
         .arg("empty.txt")
         .arg("test.txt")
@@ -125,7 +125,7 @@ fn concatenate_empty_between() {
 
 #[test]
 fn concatenate_empty_first_and_last() {
-    bat()
+    kit()
         .arg("empty.txt")
         .arg("test.txt")
         .arg("empty.txt")
@@ -136,7 +136,7 @@ fn concatenate_empty_first_and_last() {
 
 #[test]
 fn concatenate_single_line() {
-    bat()
+    kit()
         .arg("single-line.txt")
         .arg("single-line.txt")
         .assert()
@@ -146,7 +146,7 @@ fn concatenate_single_line() {
 
 #[test]
 fn concatenate_single_line_empty() {
-    bat()
+    kit()
         .arg("single-line.txt")
         .arg("empty.txt")
         .arg("single-line.txt")
@@ -157,7 +157,7 @@ fn concatenate_single_line_empty() {
 
 #[test]
 fn line_numbers() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--style=numbers")
         .arg("--decorations=always")
@@ -168,7 +168,7 @@ fn line_numbers() {
 
 #[test]
 fn line_range_2_3() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=2:3")
         .assert()
@@ -178,7 +178,7 @@ fn line_range_2_3() {
 
 #[test]
 fn line_range_up_to_2_from_back() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=:-2")
         .assert()
@@ -188,7 +188,7 @@ fn line_range_up_to_2_from_back() {
 
 #[test]
 fn line_range_up_to_2_from_back_single_line_is_empty() {
-    bat()
+    kit()
         .arg("single-line.txt")
         .arg("--line-range=:-2")
         .assert()
@@ -198,7 +198,7 @@ fn line_range_up_to_2_from_back_single_line_is_empty() {
 
 #[test]
 fn line_range_from_back_last_two() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=-2:")
         .assert()
@@ -208,7 +208,7 @@ fn line_range_from_back_last_two() {
 
 #[test]
 fn line_range_from_back_last_two_single_line_eq_sep() {
-    bat()
+    kit()
         .arg("single-line.txt")
         .arg("--line-range=-2:")
         .assert()
@@ -218,7 +218,7 @@ fn line_range_from_back_last_two_single_line_eq_sep() {
 
 #[test]
 fn line_range_from_back_last_two_single_line_no_sep() {
-    bat()
+    kit()
         .arg("single-line.txt")
         .arg("--line-range")
         .arg("-2:")
@@ -229,7 +229,7 @@ fn line_range_from_back_last_two_single_line_no_sep() {
 
 #[test]
 fn line_range_first_two() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=:2")
         .assert()
@@ -239,7 +239,7 @@ fn line_range_first_two() {
 
 #[test]
 fn line_range_last_3() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=8:")
         .assert()
@@ -249,7 +249,7 @@ fn line_range_last_3() {
 
 #[test]
 fn line_range_multiple() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=1:2")
         .arg("--line-range=4:4")
@@ -260,7 +260,7 @@ fn line_range_multiple() {
 
 #[test]
 fn line_range_multiple_with_context() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=2::1")
         .arg("--line-range=8::1")
@@ -271,7 +271,7 @@ fn line_range_multiple_with_context() {
 
 #[test]
 fn line_range_context_around_single_line() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=5::2")
         .assert()
@@ -281,7 +281,7 @@ fn line_range_context_around_single_line() {
 
 #[test]
 fn line_range_context_around_single_line_minimal() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=5::1")
         .assert()
@@ -291,7 +291,7 @@ fn line_range_context_around_single_line_minimal() {
 
 #[test]
 fn line_range_context_around_range() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=4:6:2")
         .assert()
@@ -301,7 +301,7 @@ fn line_range_context_around_range() {
 
 #[test]
 fn line_range_context_at_file_boundaries() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=1::2")
         .assert()
@@ -311,7 +311,7 @@ fn line_range_context_at_file_boundaries() {
 
 #[test]
 fn line_range_context_at_end_of_file() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=10::2")
         .assert()
@@ -321,7 +321,7 @@ fn line_range_context_at_end_of_file() {
 
 #[test]
 fn line_range_context_zero() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=5::0")
         .assert()
@@ -331,7 +331,7 @@ fn line_range_context_zero() {
 
 #[test]
 fn line_range_context_negative_single_line() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=5::-1")
         .assert()
@@ -343,7 +343,7 @@ fn line_range_context_negative_single_line() {
 
 #[test]
 fn line_range_context_negative_range() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=5:6:-1")
         .assert()
@@ -355,7 +355,7 @@ fn line_range_context_negative_range() {
 
 #[test]
 fn line_range_context_non_numeric_single_line() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=10::abc")
         .assert()
@@ -367,7 +367,7 @@ fn line_range_context_non_numeric_single_line() {
 
 #[test]
 fn line_range_context_non_numeric_range() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=10:12:xyz")
         .assert()
@@ -379,7 +379,7 @@ fn line_range_context_non_numeric_range() {
 
 #[test]
 fn line_range_context_very_large() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--line-range=10::999999")
         .assert()
@@ -391,7 +391,7 @@ fn line_range_context_very_large() {
 
 #[test]
 fn piped_output_with_implicit_auto_style() {
-    bat()
+    kit()
         .write_stdin("hello\nworld\n")
         .assert()
         .success()
@@ -400,7 +400,7 @@ fn piped_output_with_implicit_auto_style() {
 
 #[test]
 fn piped_output_with_line_number_flag() {
-    bat()
+    kit()
         .arg("--number")
         .write_stdin("hello\nworld\n")
         .assert()
@@ -410,7 +410,7 @@ fn piped_output_with_line_number_flag() {
 
 #[test]
 fn piped_output_with_line_numbers_style_flag() {
-    bat()
+    kit()
         .arg("--style=numbers")
         .write_stdin("hello\nworld\n")
         .assert()
@@ -421,7 +421,7 @@ fn piped_output_with_line_numbers_style_flag() {
 #[test]
 #[cfg(not(target_os = "windows"))]
 fn piped_output_with_line_numbers_with_header_grid_style_flag() {
-    bat()
+    kit()
         .arg("--style=header,grid,numbers")
         .write_stdin("hello\nworld\n")
         .assert()
@@ -439,7 +439,7 @@ fn piped_output_with_line_numbers_with_header_grid_style_flag() {
 
 #[test]
 fn piped_output_with_auto_style() {
-    bat()
+    kit()
         .arg("--style=auto")
         .write_stdin("hello\nworld\n")
         .assert()
@@ -450,7 +450,7 @@ fn piped_output_with_auto_style() {
 #[test]
 #[cfg(not(target_os = "windows"))]
 fn piped_output_with_default_style_flag() {
-    bat()
+    kit()
         .arg("--style=default")
         .write_stdin("hello\nworld\n")
         .assert()
@@ -468,7 +468,7 @@ fn piped_output_with_default_style_flag() {
 
 #[test]
 fn squeeze_blank() {
-    bat()
+    kit()
         .arg("empty_lines.txt")
         .arg("--squeeze-blank")
         .assert()
@@ -478,7 +478,7 @@ fn squeeze_blank() {
 
 #[test]
 fn squeeze_blank_line_numbers() {
-    bat()
+    kit()
         .arg("empty_lines.txt")
         .arg("--squeeze-blank")
         .arg("--decorations=always")
@@ -490,7 +490,7 @@ fn squeeze_blank_line_numbers() {
 
 #[test]
 fn squeeze_limit() {
-    bat()
+    kit()
         .arg("empty_lines.txt")
         .arg("--squeeze-blank")
         .arg("--squeeze-limit=2")
@@ -498,7 +498,7 @@ fn squeeze_limit() {
         .success()
         .stdout("line 1\n\n\nline 5\n\n\nline 20\nline 21\n\n\nline 24\n\nline 26\n\n\nline 30\n");
 
-    bat()
+    kit()
         .arg("empty_lines.txt")
         .arg("--squeeze-blank")
         .arg("--squeeze-limit=5")
@@ -509,7 +509,7 @@ fn squeeze_limit() {
 
 #[test]
 fn squeeze_limit_line_numbers() {
-    bat()
+    kit()
         .arg("empty_lines.txt")
         .arg("--squeeze-blank")
         .arg("--squeeze-limit=2")
@@ -519,7 +519,7 @@ fn squeeze_limit_line_numbers() {
         .success()
         .stdout("   1 line 1\n   2 \n   3 \n   5 line 5\n   6 \n   7 \n  20 line 20\n  21 line 21\n  22 \n  23 \n  24 line 24\n  25 \n  26 line 26\n  27 \n  28 \n  30 line 30\n");
 
-    bat()
+    kit()
         .arg("empty_lines.txt")
         .arg("--squeeze-blank")
         .arg("--squeeze-limit=5")
@@ -535,7 +535,7 @@ fn list_themes_with_colors() {
     let default_theme_chunk = "Monokai Extended\x1B[0m (default)";
     let default_light_theme_chunk = "Monokai Extended Light\x1B[0m (default light)";
 
-    bat()
+    kit()
         .arg("--color=always")
         .arg("--list-themes")
         .assert()
@@ -551,9 +551,9 @@ fn list_themes_without_colors() {
     let default_theme_chunk = "Monokai Extended (default)";
     let default_light_theme_chunk = "Monokai Extended Light (default light)";
 
-    bat()
+    kit()
         .arg("--color=never")
-        .arg("--decorations=always") // trick bat into setting `Config::loop_through` to false
+        .arg("--decorations=always") // trick kit into setting `Config::loop_through` to false
         .arg("--list-themes")
         .assert()
         .success()
@@ -564,7 +564,7 @@ fn list_themes_without_colors() {
 
 #[test]
 fn list_themes_to_piped_output() {
-    bat().arg("--list-themes").assert().success().stdout(
+    kit().arg("--list-themes").assert().success().stdout(
         predicate::str::contains("(default)")
             .not()
             .and(predicate::str::contains("(default light)").not())
@@ -574,7 +574,7 @@ fn list_themes_to_piped_output() {
 
 #[test]
 fn list_languages() {
-    bat()
+    kit()
         .arg("--list-languages")
         .assert()
         .success()
@@ -600,7 +600,7 @@ fn long_help() {
 }
 
 fn test_help(arg: &str, expect_file: &str) {
-    let assert = bat().arg(arg).assert();
+    let assert = kit().arg(arg).assert();
     expect_test::expect_file![expect_file]
         .assert_eq(&String::from_utf8_lossy(&assert.get_output().stdout));
 }
@@ -619,7 +619,7 @@ fn basic_io_cycle() -> io::Result<()> {
     let (filename, dir) = setup_temp_file(b"I am not empty")?;
 
     let file_out = Stdio::from(File::create(&filename)?);
-    let res = bat_raw_command()
+    let res = kit_raw_command()
         .arg("test.txt")
         .arg(&filename)
         .stdout(file_out)
@@ -635,7 +635,7 @@ fn first_file_cyclic_is_ok() -> io::Result<()> {
     let (filename, dir) = setup_temp_file(b"I am not empty")?;
 
     let file_out = Stdio::from(File::create(&filename)?);
-    let res = bat_raw_command()
+    let res = kit_raw_command()
         .arg(&filename)
         .arg("test.txt")
         .stdout(file_out)
@@ -651,7 +651,7 @@ fn empty_file_cycle_is_ok() -> io::Result<()> {
     let (filename, dir) = setup_temp_file(b"I am not empty")?;
 
     let file_out = Stdio::from(File::create(&filename)?);
-    let res = bat_raw_command()
+    let res = kit_raw_command()
         .arg("empty.txt")
         .arg(&filename)
         .stdout(file_out)
@@ -667,7 +667,7 @@ fn stdin_to_stdout_cycle() -> io::Result<()> {
     let (filename, dir) = setup_temp_file(b"I am not empty")?;
     let file_in = Stdio::from(File::open(&filename)?);
     let file_out = Stdio::from(File::create(&filename)?);
-    let res = bat_raw_command()
+    let res = kit_raw_command()
         .arg("test.txt")
         .arg("-")
         .stdin(file_in)
@@ -680,19 +680,19 @@ fn stdin_to_stdout_cycle() -> io::Result<()> {
 
 #[cfg(unix)]
 #[test]
-fn bat_error_to_stderr() {
-    bat()
+fn kit_error_to_stderr() {
+    kit()
         .arg("/tmp")
         .assert()
         .failure()
-        .stderr(predicate::str::contains("[bat error]"));
+        .stderr(predicate::str::contains("[kit error]"));
 }
 
 #[cfg(unix)]
 #[test]
 fn no_args_doesnt_break() {
-    // To simulate bat getting started from the shell, a process is created with stdin and stdout
-    // as the slave end of a pseudo terminal. Although both point to the same "file", bat should
+    // To simulate kit getting started from the shell, a process is created with stdin and stdout
+    // as the slave end of a pseudo terminal. Although both point to the same "file", kit should
     // not exit, because in this case it is safe to read and write to the same fd, which is why
     // this test exists.
 
@@ -703,7 +703,7 @@ fn no_args_doesnt_break() {
     let stdin = Stdio::from(stdin_file);
     let stdout = Stdio::from(stdout_file);
 
-    let mut child = bat_raw_command()
+    let mut child = kit_raw_command()
         .stdin(stdin)
         .stdout(stdout)
         .env("TERM", "dumb") // Suppresses color detection
@@ -737,7 +737,7 @@ fn no_args_doesnt_break() {
 
 #[test]
 fn tabs_numbers() {
-    bat()
+    kit()
         .arg("tabs.txt")
         .arg("--tabs=4")
         .arg("--style=numbers")
@@ -760,7 +760,7 @@ fn tabs_numbers() {
 
 #[test]
 fn tabs_passthrough_wrapped() {
-    bat()
+    kit()
         .arg("tabs.txt")
         .arg("--tabs=0")
         .arg("--style=plain")
@@ -783,7 +783,7 @@ fn tabs_passthrough_wrapped() {
 
 #[test]
 fn tabs_4_wrapped() {
-    bat()
+    kit()
         .arg("tabs.txt")
         .arg("--tabs=4")
         .arg("--style=plain")
@@ -806,7 +806,7 @@ fn tabs_4_wrapped() {
 
 #[test]
 fn tabs_8_wrapped() {
-    bat()
+    kit()
         .arg("tabs.txt")
         .arg("--tabs=8")
         .arg("--style=plain")
@@ -829,7 +829,7 @@ fn tabs_8_wrapped() {
 
 #[test]
 fn tabs_passthrough() {
-    bat()
+    kit()
         .arg("tabs.txt")
         .arg("--tabs=0")
         .arg("--style=plain")
@@ -852,7 +852,7 @@ fn tabs_passthrough() {
 
 #[test]
 fn tabs_4() {
-    bat()
+    kit()
         .arg("tabs.txt")
         .arg("--tabs=4")
         .arg("--style=plain")
@@ -875,7 +875,7 @@ fn tabs_4() {
 
 #[test]
 fn tabs_8() {
-    bat()
+    kit()
         .arg("tabs.txt")
         .arg("--tabs=8")
         .arg("--style=plain")
@@ -898,9 +898,9 @@ fn tabs_8() {
 
 #[test]
 fn tabs_4_env_overrides_config() {
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", "bat-tabs.conf")
-        .env("BAT_TABS", "4")
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", "kit-tabs.conf")
+        .env("KIT_TABS", "4")
         .arg("tabs.txt")
         .arg("--style=plain")
         .arg("--decorations=always")
@@ -922,9 +922,9 @@ fn tabs_4_env_overrides_config() {
 
 #[test]
 fn tabs_4_arg_overrides_env() {
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", "bat-tabs.conf")
-        .env("BAT_TABS", "6")
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", "kit-tabs.conf")
+        .env("KIT_TABS", "6")
         .arg("tabs.txt")
         .arg("--tabs=4")
         .arg("--style=plain")
@@ -947,8 +947,8 @@ fn tabs_4_arg_overrides_env() {
 
 #[test]
 fn tabs_4_arg_overrides_env_noconfig() {
-    bat()
-        .env("BAT_TABS", "6")
+    kit()
+        .env("KIT_TABS", "6")
         .arg("tabs.txt")
         .arg("--tabs=4")
         .arg("--style=plain")
@@ -971,17 +971,17 @@ fn tabs_4_arg_overrides_env_noconfig() {
 
 #[test]
 fn fail_non_existing() {
-    bat().arg("non-existing-file").assert().failure();
+    kit().arg("non-existing-file").assert().failure();
 }
 
 #[test]
 fn fail_directory() {
-    bat().arg("sub_directory").assert().failure();
+    kit().arg("sub_directory").assert().failure();
 }
 
 #[test]
 fn do_not_exit_directory() {
-    bat()
+    kit()
         .arg("sub_directory")
         .arg("test.txt")
         .assert()
@@ -993,7 +993,7 @@ fn do_not_exit_directory() {
 #[serial]
 fn pager_basic() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat()
+        kit()
             .env("PAGER", mocked_pagers::from("echo pager-output"))
             .arg("--paging=always")
             .arg("test.txt")
@@ -1003,11 +1003,12 @@ fn pager_basic() {
     });
 }
 
+
 #[test]
 #[serial]
 fn pager_basic_arg() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat()
+        kit()
             .arg(format!(
                 "--pager={}",
                 mocked_pagers::from("echo pager-output")
@@ -1024,9 +1025,9 @@ fn pager_basic_arg() {
 #[serial]
 fn pager_overwrite() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat()
+        kit()
             .env("PAGER", mocked_pagers::from("echo other-pager"))
-            .env("BAT_PAGER", mocked_pagers::from("echo pager-output"))
+            .env("KIT_PAGER", mocked_pagers::from("echo pager-output"))
             .arg("--paging=always")
             .arg("test.txt")
             .assert()
@@ -1037,9 +1038,9 @@ fn pager_overwrite() {
 
 #[test]
 fn pager_disable() {
-    bat()
+    kit()
         .env("PAGER", "echo other-pager")
-        .env("BAT_PAGER", "")
+        .env("KIT_PAGER", "")
         .arg("--paging=always")
         .arg("test.txt")
         .assert()
@@ -1051,10 +1052,10 @@ fn pager_disable() {
 #[serial]
 fn pager_arg_override_env_withconfig() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat_with_config()
-            .env("BAT_CONFIG_PATH", get_config())
+        kit_with_config()
+            .env("KIT_CONFIG_PATH", get_config())
             .env("PAGER", mocked_pagers::from("echo another-pager"))
-            .env("BAT_PAGER", mocked_pagers::from("echo other-pager"))
+            .env("KIT_PAGER", mocked_pagers::from("echo other-pager"))
             .arg(format!(
                 "--pager={}",
                 mocked_pagers::from("echo pager-output")
@@ -1071,9 +1072,9 @@ fn pager_arg_override_env_withconfig() {
 #[serial]
 fn pager_arg_override_env_noconfig() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat()
+        kit()
             .env("PAGER", mocked_pagers::from("echo another-pager"))
-            .env("BAT_PAGER", mocked_pagers::from("echo other-pager"))
+            .env("KIT_PAGER", mocked_pagers::from("echo other-pager"))
             .arg(format!(
                 "--pager={}",
                 mocked_pagers::from("echo pager-output")
@@ -1088,12 +1089,12 @@ fn pager_arg_override_env_noconfig() {
 
 #[test]
 #[serial]
-fn pager_env_bat_pager_override_config() {
+fn pager_env_kit_pager_override_config() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat_with_config()
-            .env("BAT_CONFIG_PATH", get_config())
+        kit_with_config()
+            .env("KIT_CONFIG_PATH", get_config())
             .env("PAGER", mocked_pagers::from("echo other-pager"))
-            .env("BAT_PAGER", mocked_pagers::from("echo pager-output"))
+            .env("KIT_PAGER", mocked_pagers::from("echo pager-output"))
             .arg("--paging=always")
             .arg("test.txt")
             .assert()
@@ -1106,8 +1107,8 @@ fn pager_env_bat_pager_override_config() {
 #[serial]
 fn pager_env_pager_nooverride_config() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat_with_config()
-            .env("BAT_CONFIG_PATH", get_config())
+        kit_with_config()
+            .env("KIT_CONFIG_PATH", get_config())
             .env("PAGER", mocked_pagers::from("echo other-pager"))
             .arg("--paging=always")
             .arg("test.txt")
@@ -1118,9 +1119,9 @@ fn pager_env_pager_nooverride_config() {
 }
 
 #[test]
-fn env_var_pager_value_bat() {
-    bat()
-        .env("PAGER", "bat")
+fn env_var_pager_value_kit() {
+    kit()
+        .env("PAGER", "kit")
         .arg("--paging=always")
         .arg("test.txt")
         .assert()
@@ -1129,25 +1130,25 @@ fn env_var_pager_value_bat() {
 }
 
 #[test]
-fn env_var_bat_pager_value_bat() {
-    bat()
-        .env("BAT_PAGER", "bat")
+fn env_var_kit_pager_value_kit() {
+    kit()
+        .env("KIT_PAGER", "kit")
         .arg("--paging=always")
         .arg("test.txt")
         .assert()
         .failure()
-        .stderr(predicate::str::contains("bat as a pager is disallowed"));
+        .stderr(predicate::str::contains("kit as a pager is disallowed"));
 }
 
 #[test]
-fn pager_value_bat() {
-    bat()
-        .arg("--pager=bat")
+fn pager_value_kit() {
+    kit()
+        .arg("--pager=kit")
         .arg("--paging=always")
         .arg("test.txt")
         .assert()
         .failure()
-        .stderr(predicate::str::contains("bat as a pager is disallowed"));
+        .stderr(predicate::str::contains("kit as a pager is disallowed"));
 }
 
 /// We shall use less instead of most if PAGER is used since PAGER
@@ -1157,7 +1158,7 @@ fn pager_value_bat() {
 fn pager_most_from_pager_env_var() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
         // If the output is not "I am most" then we know 'most' is not used
-        bat()
+        kit()
             .env("PAGER", mocked_pagers::from("most"))
             .arg("--paging=always")
             .arg("test.txt")
@@ -1167,14 +1168,14 @@ fn pager_most_from_pager_env_var() {
     });
 }
 
-/// If the bat-specific BAT_PAGER is used, obey the wish of the user
+/// If the kit-specific KIT_PAGER is used, obey the wish of the user
 /// and allow 'most'
 #[test]
 #[serial] // Because of PATH
-fn pager_most_from_bat_pager_env_var() {
+fn pager_most_from_kit_pager_env_var() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat()
-            .env("BAT_PAGER", mocked_pagers::from("most"))
+        kit()
+            .env("KIT_PAGER", mocked_pagers::from("most"))
             .arg("--paging=always")
             .arg("test.txt")
             .assert()
@@ -1183,12 +1184,12 @@ fn pager_most_from_bat_pager_env_var() {
     });
 }
 
-/// Same reasoning with --pager as with BAT_PAGER
+/// Same reasoning with --pager as with KIT_PAGER
 #[test]
 #[serial] // Because of PATH
 fn pager_most_from_pager_arg() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat()
+        kit()
             .arg("--paging=always")
             .arg(format!("--pager={}", mocked_pagers::from("most")))
             .arg("test.txt")
@@ -1203,7 +1204,7 @@ fn pager_most_from_pager_arg() {
 #[serial] // Because of PATH
 fn pager_most_with_arg() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat()
+        kit()
             .env("PAGER", format!("{} -w", mocked_pagers::from("most")))
             .arg("--paging=always")
             .arg("test.txt")
@@ -1218,7 +1219,7 @@ fn pager_most_with_arg() {
 #[serial] // Because of PATH
 fn pager_more() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat()
+        kit()
             .env("PAGER", mocked_pagers::from("more"))
             .arg("--paging=always")
             .arg("test.txt")
@@ -1230,7 +1231,7 @@ fn pager_more() {
 
 #[test]
 fn alias_pager_disable() {
-    bat()
+    kit()
         .env("PAGER", "echo other-pager")
         .arg("-P")
         .arg("test.txt")
@@ -1243,7 +1244,7 @@ fn alias_pager_disable() {
 #[serial]
 fn alias_pager_disable_long_overrides_short() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat()
+        kit()
             .env("PAGER", mocked_pagers::from("echo pager-output"))
             .arg("-P")
             .arg("--paging=always")
@@ -1256,7 +1257,7 @@ fn alias_pager_disable_long_overrides_short() {
 
 #[test]
 fn disable_pager_if_disable_paging_flag_comes_after_paging() {
-    bat()
+    kit()
         .env("PAGER", "echo pager-output")
         .arg("--paging=always")
         .arg("-P")
@@ -1268,7 +1269,7 @@ fn disable_pager_if_disable_paging_flag_comes_after_paging() {
 
 #[test]
 fn disable_pager_if_pp_flag_comes_after_paging() {
-    bat()
+    kit()
         .env("PAGER", "echo pager-output")
         .arg("--paging=always")
         .arg("-pp")
@@ -1280,7 +1281,7 @@ fn disable_pager_if_pp_flag_comes_after_paging() {
 
 #[test]
 fn enable_pager_if_disable_paging_flag_comes_before_paging() {
-    bat()
+    kit()
         .env("PAGER", "echo pager-output")
         .arg("-P")
         .arg("--paging=always")
@@ -1292,7 +1293,7 @@ fn enable_pager_if_disable_paging_flag_comes_before_paging() {
 
 #[test]
 fn enable_pager_if_pp_flag_comes_before_paging() {
-    bat()
+    kit()
         .env("PAGER", "echo pager-output")
         .arg("-pp")
         .arg("--paging=always")
@@ -1304,7 +1305,7 @@ fn enable_pager_if_pp_flag_comes_before_paging() {
 
 #[test]
 fn paging_does_not_override_simple_plain() {
-    bat()
+    kit()
         .env("PAGER", "echo pager-output")
         .arg("--decorations=always")
         .arg("--plain")
@@ -1317,7 +1318,7 @@ fn paging_does_not_override_simple_plain() {
 
 #[test]
 fn simple_plain_does_not_override_paging() {
-    bat()
+    kit()
         .env("PAGER", "echo pager-output")
         .arg("--paging=always")
         .arg("--plain")
@@ -1329,8 +1330,8 @@ fn simple_plain_does_not_override_paging() {
 
 #[test]
 fn pager_failed_to_parse() {
-    bat()
-        .env("BAT_PAGER", "mismatched-quotes 'a")
+    kit()
+        .env("KIT_PAGER", "mismatched-quotes 'a")
         .arg("--paging=always")
         .arg("test.txt")
         .assert()
@@ -1340,11 +1341,11 @@ fn pager_failed_to_parse() {
 
 #[test]
 #[serial]
-fn env_var_bat_paging() {
+fn env_var_kit_paging() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat()
-            .env("BAT_PAGER", mocked_pagers::from("echo pager-output"))
-            .env("BAT_PAGING", "always")
+        kit()
+            .env("KIT_PAGER", mocked_pagers::from("echo pager-output"))
+            .env("KIT_PAGING", "always")
             .arg("test.txt")
             .assert()
             .success()
@@ -1354,23 +1355,23 @@ fn env_var_bat_paging() {
 
 #[test]
 fn basic_set_terminal_title() {
-    bat()
+    kit()
         .arg("--paging=always")
         .arg("--set-terminal-title")
         .arg("test.txt")
         .assert()
         .success()
-        .stdout("\u{1b}]0;bat: test.txt\x07hello world\n")
+        .stdout("\u{1b}]0;kit: test.txt\x07hello world\n")
         .stderr("");
 }
 
 #[test]
 fn diagnostic_sanity_check() {
-    bat()
+    kit()
         .arg("--diagnostic")
         .assert()
         .success()
-        .stdout(predicate::str::contains("BAT_PAGER="))
+        .stdout(predicate::str::contains("KIT_PAGER="))
         .stderr("");
 }
 
@@ -1383,8 +1384,8 @@ fn help_works_with_invalid_config() {
     std::fs::write(&tmp_config_path, "--invalid-option").expect("can write config file");
 
     // --help should work despite invalid config
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
         .arg("--help")
         .assert()
         .success()
@@ -1393,8 +1394,8 @@ fn help_works_with_invalid_config() {
         ));
 
     // -h should also work
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
         .arg("-h")
         .assert()
         .success()
@@ -1410,20 +1411,20 @@ fn version_works_with_invalid_config() {
     std::fs::write(&tmp_config_path, "--invalid-option").expect("can write config file");
 
     // --version should work despite invalid config
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
         .arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("bat "));
+        .stdout(predicate::str::contains("kit "));
 
     // -V should also work
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
         .arg("-V")
         .assert()
         .success()
-        .stdout(predicate::str::contains("bat "));
+        .stdout(predicate::str::contains("kit "));
 }
 
 #[test]
@@ -1435,16 +1436,16 @@ fn diagnostic_works_with_invalid_config() {
     std::fs::write(&tmp_config_path, "--invalid-option").expect("can write config file");
 
     // --diagnostic should work despite invalid config
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
         .arg("--diagnostic")
         .assert()
         .success()
         .stdout(predicate::str::contains("#### Software version"));
 
     // --diagnostics (alias) should also work
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
         .arg("--diagnostics")
         .assert()
         .success()
@@ -1453,15 +1454,15 @@ fn diagnostic_works_with_invalid_config() {
 
 #[test]
 fn config_location_test() {
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", "bat.conf")
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", "kit.conf")
         .arg("--config-file")
         .assert()
         .success()
-        .stdout("bat.conf\n");
+        .stdout("kit.conf\n");
 
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", "not-existing.conf")
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", "not-existing.conf")
         .arg("--config-file")
         .assert()
         .success()
@@ -1473,9 +1474,9 @@ fn config_location_when_generating() {
     let tmp_dir = tempdir().expect("can create temporary directory");
     let tmp_config_path = tmp_dir.path().join("should-be-created.conf");
 
-    // Create the file with bat
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
+    // Create the file with kit
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", tmp_config_path.to_str().unwrap())
         .arg("--generate-config-file")
         .assert()
         .success()
@@ -1489,9 +1490,9 @@ fn config_location_when_generating() {
 }
 
 #[test]
-fn config_location_from_bat_config_dir_variable() {
-    bat_with_config()
-        .env("BAT_CONFIG_DIR", "conf/")
+fn config_location_from_kit_config_dir_variable() {
+    kit_with_config()
+        .env("KIT_CONFIG_DIR", "conf/")
         .arg("--config-file")
         .assert()
         .success()
@@ -1502,8 +1503,8 @@ fn config_location_from_bat_config_dir_variable() {
 #[serial]
 fn config_read_arguments_from_file() {
     mocked_pagers::with_mocked_versions_of_more_and_most_in_path(|| {
-        bat_with_config()
-            .env("BAT_CONFIG_PATH", get_config())
+        kit_with_config()
+            .env("KIT_CONFIG_PATH", get_config())
             .arg("test.txt")
             .assert()
             .success()
@@ -1529,13 +1530,13 @@ fn cache_clear() {
         .count();
 
     // Clear the targeted cache
-    // Include the BAT_CONFIG_PATH and BAT_THEME environment variables to ensure that
+    // Include the KIT_CONFIG_PATH and KIT_THEME environment variables to ensure that
     // options loaded from a config or the environment are not inserted
     // before the cache subcommand, which would break it.
-    bat_with_config()
+    kit_with_config()
         .current_dir(Path::new(EXAMPLES_DIR).join(src_dir))
-        .env("BAT_CONFIG_PATH", "bat.conf")
-        .env("BAT_THEME", "1337")
+        .env("KIT_CONFIG_PATH", "kit.conf")
+        .env("KIT_THEME", "1337")
         .arg("cache")
         .arg("--clear")
         .arg("--source")
@@ -1570,13 +1571,13 @@ fn cache_build() {
     let tmp_metadata_path = tmp_dir.path().join("metadata.yaml");
 
     // Build the cache
-    // Include the BAT_CONFIG_PATH and BAT_THEME environment variables to ensure that
+    // Include the KIT_CONFIG_PATH and KIT_THEME environment variables to ensure that
     // options loaded from a config or the environment are not inserted
     // before the cache subcommand, which would break it.
-    bat_with_config()
+    kit_with_config()
         .current_dir(Path::new(EXAMPLES_DIR).join(src_dir))
-        .env("BAT_CONFIG_PATH", "bat.conf")
-        .env("BAT_THEME", "1337")
+        .env("KIT_CONFIG_PATH", "kit.conf")
+        .env("KIT_THEME", "1337")
         .arg("cache")
         .arg("--build")
         .arg("--blank")
@@ -1610,7 +1611,7 @@ fn utf16() {
     // BOM removed. This behavior is wanted in interactive mode as
     // some terminals seem to display the BOM character as a space,
     // and it also breaks syntax highlighting.
-    bat()
+    kit()
         .arg("--plain")
         .arg("--decorations=always")
         .arg("test_UTF-16LE.txt")
@@ -1618,7 +1619,7 @@ fn utf16() {
         .success()
         .stdout("hello world\n");
 
-    bat()
+    kit()
         .arg("--plain")
         .arg("--decorations=always")
         .arg("test_UTF-16BE.txt")
@@ -1629,7 +1630,7 @@ fn utf16() {
 
 #[test]
 fn utf16le() {
-    bat()
+    kit()
         .arg("--decorations=always")
         .arg("--style=numbers")
         .arg("--color=never")
@@ -1641,7 +1642,7 @@ fn utf16le() {
 
 #[test]
 fn utf16be() {
-    bat()
+    kit()
         .arg("--decorations=always")
         .arg("--style=numbers")
         .arg("--color=never")
@@ -1654,7 +1655,7 @@ fn utf16be() {
 // Regression test for https://github.com/sharkdp/bat/issues/1922
 #[test]
 fn bom_not_stripped_in_loop_through_mode() {
-    bat()
+    kit()
         .arg("--plain")
         .arg("--decorations=never")
         .arg("--color=never")
@@ -1667,7 +1668,7 @@ fn bom_not_stripped_in_loop_through_mode() {
 // Regression test for https://github.com/sharkdp/bat/issues/1922
 #[test]
 fn bom_stripped_when_colored_output() {
-    bat()
+    kit()
         .arg("--color=always")
         .arg("--decorations=never")
         .arg("test_BOM.txt")
@@ -1681,7 +1682,7 @@ fn bom_stripped_when_colored_output() {
 // Regression test for https://github.com/sharkdp/bat/issues/1922
 #[test]
 fn bom_stripped_when_no_color_and_not_loop_through() {
-    bat()
+    kit()
         .arg("--color=never")
         .arg("--decorations=always")
         .arg("--style=numbers,grid,header")
@@ -1703,7 +1704,7 @@ fn bom_stripped_when_no_color_and_not_loop_through() {
 // Regression test for https://github.com/sharkdp/bat/issues/2541
 #[test]
 fn no_broken_osc_emit_with_line_wrapping() {
-    bat()
+    kit()
         .arg("--color=always")
         .arg("--decorations=never")
         .arg("--wrap=character")
@@ -1716,7 +1717,7 @@ fn no_broken_osc_emit_with_line_wrapping() {
 
 #[test]
 fn can_print_file_named_cache() {
-    bat_with_config()
+    kit_with_config()
         .arg("cache")
         .assert()
         .success()
@@ -1726,7 +1727,7 @@ fn can_print_file_named_cache() {
 
 #[test]
 fn can_print_file_named_cache_with_additional_argument() {
-    bat_with_config()
+    kit_with_config()
         .arg("cache")
         .arg("test.txt")
         .assert()
@@ -1737,7 +1738,7 @@ fn can_print_file_named_cache_with_additional_argument() {
 
 #[test]
 fn can_print_file_starting_with_cache() {
-    bat_with_config()
+    kit_with_config()
         .arg("cache.c")
         .assert()
         .success()
@@ -1747,14 +1748,14 @@ fn can_print_file_starting_with_cache() {
 
 #[test]
 fn does_not_print_unwanted_file_named_cache() {
-    bat_with_config().arg("cach").assert().failure();
+    kit_with_config().arg("cach").assert().failure();
 }
 
 #[test]
 fn accepts_no_custom_assets_arg() {
     // Just make sure --no-custom-assets is considered a valid arg
     // Don't bother to actually verify that it works
-    bat()
+    kit()
         .arg("--no-custom-assets")
         .arg("test.txt")
         .assert()
@@ -1763,7 +1764,7 @@ fn accepts_no_custom_assets_arg() {
 
 #[test]
 fn unicode_wrap() {
-    bat_with_config()
+    kit_with_config()
         .arg("unicode-wrap.txt")
         .arg("--style=numbers,snip")
         .arg("--decorations=always")
@@ -1805,7 +1806,7 @@ fn unicode_wrap() {
 
 #[test]
 fn snip() {
-    bat()
+    kit()
         .arg("multiline.txt")
         .arg("--style=numbers,snip")
         .arg("--decorations=always")
@@ -1831,7 +1832,7 @@ fn snip() {
 
 #[test]
 fn empty_file_leads_to_empty_output_with_grid_enabled() {
-    bat()
+    kit()
         .arg("empty.txt")
         .arg("--style=grid")
         .arg("--decorations=always")
@@ -1843,7 +1844,7 @@ fn empty_file_leads_to_empty_output_with_grid_enabled() {
 
 #[test]
 fn empty_file_leads_to_empty_output_with_rule_enabled() {
-    bat()
+    kit()
         .arg("empty.txt")
         .arg("--style=rule")
         .arg("--decorations=always")
@@ -1855,7 +1856,7 @@ fn empty_file_leads_to_empty_output_with_rule_enabled() {
 
 #[test]
 fn header_basic() {
-    bat()
+    kit()
         .arg("test.txt")
         .arg("--decorations=always")
         .arg("--style=header")
@@ -1869,7 +1870,7 @@ fn header_basic() {
 
 #[test]
 fn header_full_basic() {
-    bat()
+    kit()
         .arg("test.txt")
         .arg("--decorations=always")
         .arg("--style=header-filename,header-filesize")
@@ -1883,8 +1884,8 @@ fn header_full_basic() {
 
 #[test]
 fn header_env_basic() {
-    bat_with_config()
-        .env("BAT_STYLE", "header-filename,header-filesize")
+    kit_with_config()
+        .env("KIT_STYLE", "header-filename,header-filesize")
         .arg("test.txt")
         .arg("--decorations=always")
         .arg("-r=0:0")
@@ -1897,8 +1898,8 @@ fn header_env_basic() {
 
 #[test]
 fn header_arg_overrides_env() {
-    bat_with_config()
-        .env("BAT_STYLE", "header-filesize")
+    kit_with_config()
+        .env("KIT_STYLE", "header-filesize")
         .arg("test.txt")
         .arg("--decorations=always")
         .arg("--style=header-filename")
@@ -1912,7 +1913,7 @@ fn header_arg_overrides_env() {
 
 #[test]
 fn header_binary() {
-    bat()
+    kit()
         .arg("test.binary")
         .arg("--decorations=always")
         .arg("--style=header")
@@ -1926,7 +1927,7 @@ fn header_binary() {
 
 #[test]
 fn header_full_binary() {
-    bat()
+    kit()
         .arg("test.binary")
         .arg("--decorations=always")
         .arg("--style=header-filename,header-filesize")
@@ -1941,7 +1942,7 @@ fn header_full_binary() {
 #[test]
 #[cfg(not(feature = "git"))]
 fn header_narrow_terminal() {
-    bat()
+    kit()
         .arg("--terminal-width=30")
         .arg("--decorations=always")
         .arg("this-file-path-is-really-long-and-would-have-broken-the-layout-of-the-header.txt")
@@ -1965,7 +1966,7 @@ fn header_narrow_terminal() {
 
 #[test]
 fn header_very_narrow_terminal() {
-    bat()
+    kit()
         .arg("--terminal-width=10")
         .arg("--decorations=always")
         .arg("this-file-path-is-really-long-and-would-have-broken-the-layout-of-the-header.txt")
@@ -1995,7 +1996,7 @@ oken
 
 #[test]
 fn header_narrow_terminal_with_multibyte_chars() {
-    bat()
+    kit()
         .arg("--terminal-width=30")
         .arg("--decorations=always")
         .arg("test.A—B가")
@@ -2007,7 +2008,7 @@ fn header_narrow_terminal_with_multibyte_chars() {
 #[test]
 #[cfg(feature = "git")] // Expected output assumes git is enabled
 fn header_default() {
-    bat()
+    kit()
         .arg("--paging=never")
         .arg("--color=never")
         .arg("--terminal-width=80")
@@ -2032,7 +2033,7 @@ fn header_default() {
 #[test]
 #[cfg(feature = "git")] // Expected output assumes git is enabled
 fn header_default_is_default() {
-    bat()
+    kit()
         .arg("--paging=never")
         .arg("--color=never")
         .arg("--terminal-width=80")
@@ -2057,7 +2058,7 @@ fn header_default_is_default() {
 #[cfg(feature = "git")] // Expected output assumes git is enabled
                         // Make sure indent isn't printed if there's no changes
 fn header_and_changes_only() {
-    bat()
+    kit()
         .arg("--style=header-filename,changes")
         .arg("--decorations=always")
         .arg("--color=never")
@@ -2070,7 +2071,7 @@ fn header_and_changes_only() {
 
 #[test]
 fn filename_stdin() {
-    bat()
+    kit()
         .arg("--decorations=always")
         .arg("--style=header")
         .arg("-r=0:0")
@@ -2086,7 +2087,7 @@ fn filename_stdin() {
 #[test]
 fn filename_stdin_binary() {
     let vec = vec![0; 1];
-    bat_with_config()
+    kit_with_config()
         .arg("--decorations=always")
         .arg("--style=header")
         .write_stdin(vec)
@@ -2099,7 +2100,7 @@ fn filename_stdin_binary() {
 
 #[test]
 fn filename_multiple_ok() {
-    bat()
+    kit()
         .arg("--decorations=always")
         .arg("--style=header")
         .arg("-r=0:0")
@@ -2115,7 +2116,7 @@ fn filename_multiple_ok() {
 
 #[test]
 fn filename_multiple_err() {
-    bat()
+    kit()
         .arg("--decorations=always")
         .arg("--style=header")
         .arg("-r=0:0")
@@ -2128,7 +2129,7 @@ fn filename_multiple_err() {
 
 #[test]
 fn header_padding() {
-    bat()
+    kit()
         .arg("--decorations=always")
         .arg("--style=header")
         .arg("test.txt")
@@ -2140,7 +2141,7 @@ fn header_padding() {
 
 #[test]
 fn header_full_padding() {
-    bat()
+    kit()
         .arg("--decorations=always")
         .arg("--style=header-filename,header-filesize")
         .arg("test.txt")
@@ -2152,7 +2153,7 @@ fn header_full_padding() {
 
 #[test]
 fn header_padding_rule() {
-    bat()
+    kit()
         .arg("--decorations=always")
         .arg("--style=header,rule")
         .arg("--terminal-width=80")
@@ -2172,7 +2173,7 @@ Single Line
 
 #[test]
 fn header_full_padding_rule() {
-    bat()
+    kit()
         .arg("--decorations=always")
         .arg("--style=header-filename,header-filesize,rule")
         .arg("--terminal-width=80")
@@ -2194,7 +2195,7 @@ Single Line
 
 #[test]
 fn grid_overrides_rule() {
-    bat()
+    kit()
         .arg("--decorations=always")
         .arg("--style=grid,rule")
         .arg("--terminal-width=80")
@@ -2212,7 +2213,7 @@ Single Line
 ",
         )
         .stderr(
-            "\x1b[33m[bat warning]\x1b[0m: Style 'rule' is a subset of style 'grid', 'rule' will not be visible.\n",
+            "\x1b[33m[kit warning]\x1b[0m: Style 'rule' is a subset of style 'grid', 'rule' will not be visible.\n",
         );
 }
 
@@ -2233,7 +2234,7 @@ fn file_with_invalid_utf8_filename() {
         writeln!(file, "dummy content").expect("can write to file");
     }
 
-    bat()
+    kit()
         .arg(file_path.as_os_str())
         .assert()
         .success()
@@ -2249,7 +2250,7 @@ fn do_not_panic_regression_tests() {
         "issue_914.rb",
         "issue_915.vue",
     ] {
-        bat()
+        kit()
             .arg("--color=always")
             .arg(format!("regression_tests/{filename}"))
             .assert()
@@ -2261,7 +2262,7 @@ fn do_not_panic_regression_tests() {
 fn do_not_detect_different_syntax_for_stdin_and_files() {
     let file = "regression_tests/issue_985.js";
 
-    let cmd_for_file = bat()
+    let cmd_for_file = kit()
         .arg("--color=always")
         .arg("--map-syntax=*.js:Markdown")
         .arg(format!("--file-name={file}"))
@@ -2270,7 +2271,7 @@ fn do_not_detect_different_syntax_for_stdin_and_files() {
         .assert()
         .success();
 
-    let cmd_for_stdin = bat()
+    let cmd_for_stdin = kit()
         .arg("--color=always")
         .arg("--map-syntax=*.js:Markdown")
         .arg("--style=plain")
@@ -2290,7 +2291,7 @@ fn do_not_detect_different_syntax_for_stdin_and_files() {
 fn no_first_line_fallback_when_mapping_to_invalid_syntax() {
     let file = "regression_tests/first_line_fallback.invalid-syntax";
 
-    bat()
+    kit()
         .arg("--color=always")
         .arg("--map-syntax=*.invalid-syntax:InvalidSyntax")
         .arg(format!("--file-name={file}"))
@@ -2303,7 +2304,7 @@ fn no_first_line_fallback_when_mapping_to_invalid_syntax() {
 
 #[test]
 fn show_all_mode() {
-    bat()
+    kit()
         .arg("--show-all")
         .arg("nonprintable.txt")
         .assert()
@@ -2313,7 +2314,7 @@ fn show_all_mode() {
 
 #[test]
 fn show_all_extends_tab_markers_to_next_tabstop() {
-    bat()
+    kit()
         .arg("tabs.txt")
         .arg("--show-all")
         .arg("--tabs=4")
@@ -2336,7 +2337,7 @@ fn show_all_extends_tab_markers_to_next_tabstop() {
 
 #[test]
 fn show_all_extends_tab_markers_to_next_tabstop_width_8() {
-    bat()
+    kit()
         .arg("tabs.txt")
         .arg("--show-all")
         .arg("--tabs=8")
@@ -2359,7 +2360,7 @@ fn show_all_extends_tab_markers_to_next_tabstop_width_8() {
 
 #[test]
 fn show_all_with_caret_notation() {
-    bat()
+    kit()
         .arg("--show-all")
         .arg("--nonprintable-notation=caret")
         .arg("nonprintable.txt")
@@ -2367,7 +2368,7 @@ fn show_all_with_caret_notation() {
         .stdout("hello·world^J\n├──┤^M^@^G^H^[")
         .stderr("");
 
-    bat()
+    kit()
         .arg("--show-all")
         .arg("--nonprintable-notation=caret")
         .arg("control_characters.txt")
@@ -2378,7 +2379,7 @@ fn show_all_with_caret_notation() {
 
 #[test]
 fn show_all_with_unicode() {
-    bat()
+    kit()
         .arg("--show-all")
         .arg("--nonprintable-notation=unicode")
         .arg("control_characters.txt")
@@ -2389,7 +2390,7 @@ fn show_all_with_unicode() {
 
 #[test]
 fn binary_as_text() {
-    bat()
+    kit()
         .arg("--binary=as-text")
         .arg("control_characters.txt")
         .assert()
@@ -2399,7 +2400,7 @@ fn binary_as_text() {
 
 #[test]
 fn no_paging_arg() {
-    bat()
+    kit()
         .arg("--no-paging")
         .arg("--color=never")
         .arg("--decorations=never")
@@ -2411,7 +2412,7 @@ fn no_paging_arg() {
 
 #[test]
 fn no_paging_short_arg() {
-    bat()
+    kit()
         .arg("-P")
         .arg("--color=never")
         .arg("--decorations=never")
@@ -2423,7 +2424,7 @@ fn no_paging_short_arg() {
 
 #[test]
 fn no_pager_arg() {
-    bat()
+    kit()
         .arg("--no-pager")
         .arg("--color=never")
         .arg("--decorations=never")
@@ -2435,7 +2436,7 @@ fn no_pager_arg() {
 
 #[test]
 fn plain_mode_does_not_add_nonexisting_newline() {
-    bat()
+    kit()
         .arg("--paging=never")
         .arg("--color=never")
         .arg("--decorations=always")
@@ -2450,7 +2451,7 @@ fn plain_mode_does_not_add_nonexisting_newline() {
 #[test]
 #[cfg(feature = "git")] // Expected output assumes git is enabled
 fn grid_for_file_without_newline() {
-    bat()
+    kit()
         .arg("--paging=never")
         .arg("--color=never")
         .arg("--terminal-width=80")
@@ -2476,7 +2477,7 @@ fn grid_for_file_without_newline() {
 // For ANSI theme, use underscore as a highlighter
 #[test]
 fn ansi_highlight_underline() {
-    bat()
+    kit()
         .arg("--paging=never")
         .arg("--color=never")
         .arg("--terminal-width=80")
@@ -2494,10 +2495,10 @@ fn ansi_highlight_underline() {
 
 // we don't really test other color schemes in the syntax-tests/source vs highlighted stuff
 // so here a simple integration test has been made for the ANSI theme,
-// which lives directly inside the bat repository
+// which lives directly inside the kit repository
 #[test]
 fn ansi_highlight_json_keys() {
-    bat()
+    kit()
         .arg("--paging=never")
         .arg("--color=always")
         .arg("--decorations=never")
@@ -2515,7 +2516,7 @@ fn ansi_highlight_json_keys() {
 #[test]
 fn ansi_passthrough_emit() {
     for wrapping in &["never", "character"] {
-        bat()
+        kit()
             .arg("--paging=never")
             .arg("--color=never")
             .arg("--terminal-width=80")
@@ -2534,7 +2535,7 @@ fn ansi_passthrough_emit() {
 // This also helps ensure that escape sequences are counted as part of the visible characters when wrapping.
 #[test]
 fn ansi_sgr_emitted_when_wrapped() {
-    bat()
+    kit()
         .arg("--paging=never")
         .arg("--color=never")
         .arg("--terminal-width=20")
@@ -2553,7 +2554,7 @@ fn ansi_sgr_emitted_when_wrapped() {
 // This also helps ensure that escape sequences are counted as part of the visible characters when wrapping.
 #[test]
 fn ansi_hyperlink_emitted_when_wrapped() {
-    bat()
+    kit()
         .arg("--paging=never")
         .arg("--color=never")
         .arg("--terminal-width=20")
@@ -2571,7 +2572,7 @@ fn ansi_hyperlink_emitted_when_wrapped() {
 // Ensure that multiple ANSI sequence SGR attributes are combined when emitted on wrapped lines.
 #[test]
 fn ansi_sgr_joins_attributes_when_wrapped() {
-    bat()
+    kit()
             .arg("--paging=never")
             .arg("--color=never")
             .arg("--terminal-width=20")
@@ -2588,7 +2589,7 @@ fn ansi_sgr_joins_attributes_when_wrapped() {
 
 #[test]
 fn ignored_suffix_arg() {
-    bat()
+    kit()
         .arg("-f")
         .arg("--theme")
         .arg("Monokai Extended")
@@ -2599,7 +2600,7 @@ fn ignored_suffix_arg() {
         .stdout("\u{1b}[38;5;231m{\u{1b}[0m\u{1b}[38;5;208m\"\u{1b}[0m\u{1b}[38;5;208mtest\u{1b}[0m\u{1b}[38;5;208m\"\u{1b}[0m\u{1b}[38;5;231m:\u{1b}[0m\u{1b}[38;5;231m \u{1b}[0m\u{1b}[38;5;186m\"\u{1b}[0m\u{1b}[38;5;186mvalue\u{1b}[0m\u{1b}[38;5;186m\"\u{1b}[0m\u{1b}[38;5;231m}\u{1b}[0m")
         .stderr("");
 
-    bat()
+    kit()
         .arg("-f")
         .arg("--theme")
         .arg("Monokai Extended")
@@ -2611,7 +2612,7 @@ fn ignored_suffix_arg() {
         .stdout("\u{1b}[38;5;231m{\u{1b}[0m\u{1b}[38;5;208m\"\u{1b}[0m\u{1b}[38;5;208mtest\u{1b}[0m\u{1b}[38;5;208m\"\u{1b}[0m\u{1b}[38;5;231m:\u{1b}[0m\u{1b}[38;5;231m \u{1b}[0m\u{1b}[38;5;186m\"\u{1b}[0m\u{1b}[38;5;186mvalue\u{1b}[0m\u{1b}[38;5;186m\"\u{1b}[0m\u{1b}[38;5;231m}\u{1b}[0m")
         .stderr("");
 
-    bat()
+    kit()
         .arg("-f")
         .arg("--theme")
         .arg("Monokai Extended")
@@ -2631,7 +2632,7 @@ fn wrapping_test(wrap_flag: &str, expect_wrap: bool) {
             "abcdefghigklmnopqrstuvxyzabcdefghigklmnopqrstuvxyzabcdefghigklmnopqrstuvxyzabcdefghigklmnopqrstuvxyz\n",
     };
 
-    bat()
+    kit()
         .arg(wrap_flag)
         .arg("--style=rule")
         .arg("--color=never")
@@ -2666,8 +2667,8 @@ fn no_wrapping_with_chop_long_lines() {
 
 #[test]
 fn theme_arg_overrides_env() {
-    bat()
-        .env("BAT_THEME", "TwoDark")
+    kit()
+        .env("KIT_THEME", "TwoDark")
         .arg("--paging=never")
         .arg("--color=never")
         .arg("--terminal-width=80")
@@ -2685,9 +2686,9 @@ fn theme_arg_overrides_env() {
 
 #[test]
 fn theme_arg_overrides_env_withconfig() {
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", "bat-theme.conf")
-        .env("BAT_THEME", "TwoDark")
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", "kit-theme.conf")
+        .env("KIT_THEME", "TwoDark")
         .arg("--paging=never")
         .arg("--color=never")
         .arg("--terminal-width=80")
@@ -2705,8 +2706,8 @@ fn theme_arg_overrides_env_withconfig() {
 
 #[test]
 fn theme_light_env_var_is_respected() {
-    bat()
-        .env("BAT_THEME_LIGHT", "Coldark-Cold")
+    kit()
+        .env("KIT_THEME_LIGHT", "Coldark-Cold")
         .env("COLORTERM", "truecolor")
         .arg("--theme=light")
         .arg("--paging=never")
@@ -2725,8 +2726,8 @@ fn theme_light_env_var_is_respected() {
 
 #[test]
 fn theme_dark_env_var_is_respected() {
-    bat()
-        .env("BAT_THEME_DARK", "Coldark-Dark")
+    kit()
+        .env("KIT_THEME_DARK", "Coldark-Dark")
         .env("COLORTERM", "truecolor")
         .arg("--theme=dark")
         .arg("--paging=never")
@@ -2745,9 +2746,9 @@ fn theme_dark_env_var_is_respected() {
 
 #[test]
 fn theme_env_overrides_config() {
-    bat_with_config()
-        .env("BAT_CONFIG_PATH", "bat-theme.conf")
-        .env("BAT_THEME", "ansi")
+    kit_with_config()
+        .env("KIT_CONFIG_PATH", "kit-theme.conf")
+        .env("KIT_THEME", "ansi")
         .arg("--paging=never")
         .arg("--color=never")
         .arg("--terminal-width=80")
@@ -2769,7 +2770,7 @@ fn highlighting_is_skipped_on_long_lines() {
         r#"[38;5;231m    {"ANGLE_instanced_arrays":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/ANGLE_instanced_arrays","spec_url":"https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/","support":{"chrome":{"version_added":"32"},"chrome_android":{"version_added":"32"},"edge":{"version_added":"12"},"firefox":{"version_added":"47"},"firefox_android":{"version_added":true},"ie":{"version_added":"11"},"opera":{"version_added":"19"},"opera_android":{"version_added":"19"},"safari":{"version_added":"8"},"safari_ios":{"version_added":"8"},"samsunginternet_android":{"version_added":"2.0"},"webview_android":{"version_added":"4.4"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}},"drawArraysInstancedANGLE":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE","spec_url":"https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/","support":{"chrome":{"version_added":"32"},"chrome_android":{"version_added":"32"},"edge":{"version_added":"12"},"firefox":{"version_added":"47"},"firefox_android":{"version_added":true},"ie":{"version_added":"11"},"opera":{"version_added":"19"},"opera_android":{"version_added":"19"},"safari":{"version_added":"8"},"safari_ios":{"version_added":"8"},"samsunginternet_android":{"version_added":"2.0"},"webview_android":{"version_added":"4.4"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}}},"drawElementsInstancedANGLE":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/ANGLE_instanced_arrays/drawElementsInstancedANGLE","spec_url":"https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/","support":{"chrome":{"version_added":"32"},"chrome_android":{"version_added":"32"},"edge":{"version_added":"12"},"firefox":{"version_added":"47"},"firefox_android":{"version_added":true},"ie":{"version_added":"11"},"opera":{"version_added":"19"},"opera_android":{"version_added":"19"},"safari":{"version_added":"8"},"safari_ios":{"version_added":"8"},"samsunginternet_android":{"version_added":"2.0"},"webview_android":{"version_added":"4.4"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}}},"vertexAttribDivisorANGLE":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/ANGLE_instanced_arrays/vertexAttribDivisorANGLE","spec_url":"https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/","support":{"chrome":{"version_added":"32"},"chrome_android":{"version_added":"32"},"edge":{"version_added":"12"},"firefox":{"version_added":"47"},"firefox_android":{"version_added":true},"ie":{"version_added":"11"},"opera":{"version_added":"19"},"opera_android":{"version_added":"19"},"safari":{"version_added":"8"},"safari_ios":{"version_added":"8"},"samsunginternet_android":{"version_added":"2.0"},"webview_android":{"version_added":"4.4"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}}}},"AbortController":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortController","spec_url":"https://dom.spec.whatwg.org/#interface-abortcontroller","support":{"chrome":{"version_added":"66"},"chrome_android":{"version_added":"66"},"edge":{"version_added":"16"},"firefox":{"version_added":"57"},"firefox_android":{"version_added":"57"},"ie":{"version_added":false},"nodejs":{"version_added":"15.0.0"},"opera":{"version_added":"53"},"opera_android":{"version_added":"47"},"safari":[{"version_added":"12.1"},{"version_added":"11.1","partial_implementation":true,"notes":"Even though <code>window.AbortController</code> is defined, it doesn't really abort <code>fetch</code> requests. See <a href='https://webkit.org/b/174980'>bug 174980</a>."}],"safari_ios":[{"version_added":"12.2"},{"version_added":"11.3","partial_implementation":true,"notes":"Even though <code>window.AbortController</code> is defined, it doesn't really abort <code>fetch</code> requests. See <a href='https://webkit.org/b/174980'>bug 174980</a>."}],"samsunginternet_android":{"version_added":"9.0"},"webview_android":{"version_added":"66"}},"status":{"experimental":true,"standard_track":true,"deprecated":false}},"AbortController":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortController/AbortController","spec_url":"https://dom.spec.whatwg.org/#ref-for-dom-abortcontroller-abortcontroller①","description":"<code>AbortController()</code> constructor","support":{"chrome":{"version_added":"66"},"chrome_android":{"version_added":"66"},"edge":{"version_added":"16"},"firefox":{"version_added":"57"},"firefox_android":{"version_added":"57"},"ie":{"version_added":false},"nodejs":{"version_added":"15.0.0"},"opera":{"version_added":"53"},"opera_android":{"version_added":"47"},"safari":[{"version_added":"12.1"},{"version_added":"11.1","partial_implementation":true,"notes":"Even though <code>window.AbortController</code> is defined, it doesn't really abort <code>fetch</code> requests. See <a href='https://webkit.org/b/174980'>bug 174980</a>."}],"safari_ios":[{"version_added":"12.2"},{"version_added":"11.3","partial_implementation":true,"notes":"Even though <code>window.AbortController</code> is defined, it doesn't really abort <code>fetch</code> requests. See <a href='https://webkit.org/b/174980'>bug 174980</a>."}],"samsunginternet_android":{"version_added":"9.0"},"webview_android":{"version_added":"66"}},"status":{"experimental":true,"standard_track":true,"deprecated":false}}},"abort":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortController/abort","spec_url":"https://dom.spec.whatwg.org/#ref-for-dom-abortcontroller-abortcontroller①","support":{"chrome":{"version_added":"66"},"chrome_android":{"version_added":"66"},"edge":{"version_added":"16"},"firefox":{"version_added":"57"},"firefox_android":{"version_added":"57"},"ie":{"version_added":false},"nodejs":{"version_added":"15.0.0"},"opera":{"version_added":"53"},"opera_android":{"version_added":"47"},"safari":[{"version_added":"12.1"},{"version_added":"11.1","partial_implementation":true,"notes":"Even though <code>window.AbortController</code> is defined, it doesn't really abort <code>fetch</code> requests. See <a href='https://webkit.org/b/174980'>bug 174980</a>."}],"safari_ios":[{"version_added":"12.2"},{"version_added":"11.3","partial_implementation":true,"notes":"Even though <code>window.AbortController</code> is defined, it doesn't really abort <code>fetch</code> requests. See <a href='https://webkit.org/b/174980'>bug 174980</a>."}],"samsunginternet_android":{"version_added":"9.0"},"webview_android":{"version_added":"66"}},"status":{"experimental":true,"standard_track":true,"deprecated":false}}},"signal":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortController/signal","spec_url":"https://dom.spec.whatwg.org/#ref-for-dom-abortcontroller-signal②","support":{"chrome":{"version_added":"66"},"chrome_android":{"version_added":"66"},"edge":{"version_added":"16"},"firefox":{"version_added":"57"},"firefox_android":{"version_added":"57"},"ie":{"version_added":false},"nodejs":{"version_added":"15.0.0"},"opera":{"version_added":"53"},"opera_android":{"version_added":"47"},"safari":[{"version_added":"12.1"},{"version_added":"11.1","partial_implementation":true,"notes":"Even though <code>window.AbortController</code> is defined, it doesn't really abort <code>fetch</code> requests. See <a href='https://webkit.org/b/174980'>bug 174980</a>."}],"safari_ios":[{"version_added":"12.2"},{"version_added":"11.3","partial_implementation":true,"notes":"Even though <code>window.AbortController</code> is defined, it doesn't really abort <code>fetch</code> requests. See <a href='https://webkit.org/b/174980'>bug 174980</a>."}],"samsunginternet_android":{"version_added":"9.0"},"webview_android":{"version_added":"66"}},"status":{"experimental":true,"standard_track":true,"deprecated":false}}}},"AbortPaymentEvent":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortPaymentEvent","support":{"chrome":{"version_added":"70"},"chrome_android":{"version_added":"70"},"edge":{"version_added":"79"},"firefox":{"version_added":false},"firefox_android":{"version_added":false},"ie":{"version_added":false},"opera":{"version_added":"57"},"opera_android":{"version_added":"49"},"safari":{"version_added":false},"safari_ios":{"version_added":false},"samsunginternet_android":{"version_added":"10.0"},"webview_android":{"version_added":false}},"status":{"experimental":true,"standard_track":false,"deprecated":false}},"AbortPaymentEvent":{"__compat":{"description":"<code>AbortPaymentEvent()</code> constructor","mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortPaymentEvent/AbortPaymentEvent","support":{"chrome":{"version_added":"70"},"chrome_android":{"version_added":"70"},"edge":{"version_added":"79"},"firefox":{"version_added":false},"firefox_android":{"version_added":false},"ie":{"version_added":false},"opera":{"version_added":"57"},"opera_android":{"version_added":"49"},"safari":{"version_added":false},"safari_ios":{"version_added":false},"samsunginternet_android":{"version_added":"10.0"},"webview_android":{"version_added":false}},"status":{"experimental":true,"standard_track":false,"deprecated":false}}},"respondWith":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortPaymentEvent/respondWith","support":{"chrome":{"version_added":"70"},"chrome_android":{"version_added":"70"},"edge":{"version_added":"79"},"firefox":{"version_added":false},"firefox_android":{"version_added":false},"ie":{"version_added":false},"opera":{"version_added":"57"},"opera_android":{"version_added":"49"},"safari":{"version_added":false},"safari_ios":{"version_added":false},"samsunginternet_android":{"version_added":"10.0"},"webview_android":{"version_added":false}},"status":{"experimental":true,"standard_track":false,"deprecated":false}}}},"AbortSignal":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortSignal","spec_url":"https://dom.spec.whatwg.org/#interface-AbortSignal","support":{"chrome":{"version_added":"66"},"chrome_android":{"version_added":"66"},"edge":{"version_added":"16"},"firefox":{"version_added":"57"},"firefox_android":{"version_added":"57"},"ie":{"version_added":false},"nodejs":{"version_added":"15.0.0"},"opera":{"version_added":"53"},"opera_android":{"version_added":"47"},"safari":{"version_added":"11.1"},"safari_ios":{"version_added":"11.3"},"samsunginternet_android":{"version_added":"9.0"},"webview_android":{"version_added":"66"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}},"abort":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortSignal/abort","spec_url":"https://dom.spec.whatwg.org/#ref-for-dom-abortsignal-abort①","support":{"chrome":{"version_added":false},"chrome_android":{"version_added":false},"edge":{"version_added":false},"firefox":{"version_added":"88"},"firefox_android":{"version_added":"88"},"ie":{"version_added":false},"nodejs":{"version_added":false},"opera":{"version_added":false},"opera_android":{"version_added":false},"safari":{"version_added":false},"safari_ios":{"version_added":false},"samsunginternet_android":{"version_added":false},"webview_android":{"version_added":false}},"status":{"experimental":false,"standard_track":true,"deprecated":false}}},"abort_event":{"__compat":{"description":"<code>abort</code> event","mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortSignal/abort_event","spec_url":"https://dom.spec.whatwg.org/#eventdef-abortsignal-abort","support":{"chrome":{"version_added":"66"},"chrome_android":{"version_added":"66"},"edge":{"version_added":"16"},"firefox":{"version_added":"57"},"firefox_android":{"version_added":"57"},"ie":{"version_added":false},"nodejs":{"version_added":"15.0.0"},"opera":{"version_added":"53"},"opera_android":{"version_added":"47"},"safari":{"version_added":"11.1"},"safari_ios":{"version_added":"11.3"},"samsunginternet_android":{"version_added":"9.0"},"webview_android":{"version_added":"66"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}}},"aborted":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortSignal/aborted","spec_url":"https://dom.spec.whatwg.org/#ref-for-dom-abortsignal-aborted①","support":{"chrome":{"version_added":"66"},"chrome_android":{"version_added":"66"},"edge":{"version_added":"16"},"firefox":{"version_added":"57"},"firefox_android":{"version_added":"57"},"ie":{"version_added":false},"nodejs":{"version_added":"15.0.0"},"opera":{"version_added":"53"},"opera_android":{"version_added":"47"},"safari":{"version_added":"11.1"},"safari_ios":{"version_added":"11.3"},"samsunginternet_android":{"version_added":"9.0"},"webview_android":{"version_added":"66"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}}},"onabort":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbortSignal/onabort","spec_url":"https://dom.spec.whatwg.org/#abortsignal-onabort","support":{"chrome":{"version_added":"66"},"chrome_android":{"version_added":"66"},"edge":{"version_added":"16"},"firefox":{"version_added":"57"},"firefox_android":{"version_added":"57"},"ie":{"version_added":false},"nodejs":{"version_added":"15.0.0"},"opera":{"version_added":"53"},"opera_android":{"version_added":"47"},"safari":{"version_added":"11.1"},"safari_ios":{"version_added":"11.3"},"samsunginternet_android":{"version_added":"9.0"},"webview_android":{"version_added":"66"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}}}},"AbsoluteOrientationSensor":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbsoluteOrientationSensor","spec_url":"https://w3c.github.io/orientation-sensor/#absoluteorientationsensor-interface","support":{"chrome":{"version_added":"67"},"chrome_android":{"version_added":"67"},"edge":{"version_added":"79"},"firefox":{"version_added":false},"firefox_android":{"version_added":false},"ie":{"version_added":false},"opera":{"version_added":"54"},"opera_android":{"version_added":"48"},"safari":{"version_added":false},"safari_ios":{"version_added":false},"samsunginternet_android":{"version_added":"9.0"},"webview_android":{"version_added":"67"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}},"AbsoluteOrientationSensor":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbsoluteOrientationSensor/AbsoluteOrientationSensor","spec_url":"https://w3c.github.io/orientation-sensor/#dom-absoluteorientationsensor-absoluteorientationsensor","description":"<code>AbsoluteOrientationSensor()</code> constructor","support":{"chrome":{"version_added":"67"},"chrome_android":{"version_added":"67"},"edge":{"version_added":"79"},"firefox":{"version_added":false},"firefox_android":{"version_added":false},"ie":{"version_added":false},"opera":{"version_added":"54"},"opera_android":{"version_added":"48"},"safari":{"version_added":false},"safari_ios":{"version_added":false},"samsunginternet_android":{"version_added":"9.0"},"webview_android":{"version_added":"67"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}}}},"AbstractRange":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbstractRange","spec_url":"https://dom.spec.whatwg.org/#interface-abstractrange","support":{"chrome":{"version_added":"90"},"chrome_android":{"version_added":"90"},"edge":[{"version_added":"90"},{"version_added":"18","version_removed":"79"}],"firefox":{"version_added":"69"},"firefox_android":{"version_added":false},"ie":{"version_added":false},"opera":{"version_added":false},"opera_android":{"version_added":false},"safari":{"version_added":"14.1"},"safari_ios":{"version_added":"14.5"},"samsunginternet_android":{"version_added":false},"webview_android":{"version_added":"90"}},"status":{"experimental":false,"standard_track":true,"deprecated":false}},"collapsed":{"__compat":{"mdn_url":"https://developer.mozilla.org/docs/Web/API/AbstractRange/collapsed","spec_url":"https://dom.spec.whatwg.org/#ref-for-dom-range-collapsed①","support":{"chrome":{"version_added":"90"},"chrome_android":{"version_added":"90"},"edge":[{"version_added":"90"},{"version_added":"18","version_removed":"79"}],"firefox":{"version_added":"69"},"firefox_android":{"version_added":false},"ie":{"version_added":false},"opera":{"version_added":false},"opera_android":"# +
         "\u{1b}[0m\n\u{1b}[38;5;231m    \u{1b}[0m\u{1b}[38;5;231m{\u{1b}[0m\u{1b}[38;5;208m\"\u{1b}[0m\u{1b}[38;5;208mversion_added\u{1b}[0m\u{1b}[38;5;208m\"\u{1b}[0m\u{1b}[38;5;231m:\u{1b}[0m\u{1b}[38;5;141mfalse\u{1b}[0m\u{1b}[38;5;231m}\u{1b}[0m\n";
 
-    bat()
+    kit()
         .arg("-f")
         .arg("--theme")
         .arg("Monokai Extended")
@@ -2789,7 +2790,7 @@ fn all_global_git_config_locations_syntax_mapping_work() {
 \u{1b}[38;5;231m    \u{1b}[0m\u{1b}[38;5;231mname\u{1b}[0m\u{1b}[38;5;231m \u{1b}[0m\u{1b}[38;5;203m=\u{1b}[0m\u{1b}[38;5;231m \u{1b}[0m\u{1b}[38;5;186mfoobar\u{1b}[0m
 ";
 
-    bat()
+    kit()
         .env("XDG_CONFIG_HOME", fake_home.join(".config").as_os_str())
         .arg("-f")
         .arg("--theme")
@@ -2801,7 +2802,7 @@ fn all_global_git_config_locations_syntax_mapping_work() {
         .stdout(expected)
         .stderr("");
 
-    bat()
+    kit()
         .env("HOME", fake_home.as_os_str())
         .arg("-f")
         .arg("--theme")
@@ -2813,7 +2814,7 @@ fn all_global_git_config_locations_syntax_mapping_work() {
         .stdout(expected)
         .stderr("");
 
-    bat()
+    kit()
         .env("HOME", fake_home.as_os_str())
         .arg("-f")
         .arg("--theme")
@@ -2828,7 +2829,7 @@ fn all_global_git_config_locations_syntax_mapping_work() {
 
 #[test]
 fn map_syntax_and_ignored_suffix_work_together() {
-    bat()
+    kit()
         .arg("-f")
         .arg("--theme")
         .arg("Monokai Extended")
@@ -2841,7 +2842,7 @@ fn map_syntax_and_ignored_suffix_work_together() {
         .stdout("\u{1b}[38;5;231m{\u{1b}[0m\u{1b}[38;5;208m\"\u{1b}[0m\u{1b}[38;5;208mtest\u{1b}[0m\u{1b}[38;5;208m\"\u{1b}[0m\u{1b}[38;5;231m:\u{1b}[0m\u{1b}[38;5;231m \u{1b}[0m\u{1b}[38;5;186m\"\u{1b}[0m\u{1b}[38;5;186mvalue\u{1b}[0m\u{1b}[38;5;186m\"\u{1b}[0m\u{1b}[38;5;231m}\u{1b}[0m")
         .stderr("");
 
-    bat()
+    kit()
         .arg("-f")
         .arg("--theme")
         .arg("Monokai Extended")
@@ -2858,14 +2859,14 @@ fn map_syntax_and_ignored_suffix_work_together() {
 
 #[test]
 fn acknowledgements() {
-    bat()
+    kit()
         .arg("--acknowledgements")
         .assert()
         .success()
         .stdout(
             // Just some sanity checking that avoids names of persons, except our own Keith Hall :)
             predicate::str::contains(
-                "Copyright (c) 2018-2021 bat-developers (https://github.com/sharkdp/bat).",
+                "Copyright (c) 2018-2021 kit-developers (https://github.com/sharkdp/bat).",
             )
             .and(predicate::str::contains(
                 "Copyright (c) 2012-2020 The Sublime CMake authors",
@@ -2896,7 +2897,7 @@ fn acknowledgements() {
 #[cfg(feature = "lessopen")]
 #[test]
 fn lessopen_file_piped() {
-    bat()
+    kit()
         .env("LESSOPEN", "|echo File is %s")
         .arg("--lessopen")
         .arg("test.txt")
@@ -2909,7 +2910,7 @@ fn lessopen_file_piped() {
 #[cfg(feature = "lessopen")]
 #[test]
 fn lessopen_stdin_piped() {
-    bat()
+    kit()
         .env("LESSOPEN", "|cat")
         .arg("--lessopen")
         .write_stdin("hello world\n")
@@ -2924,7 +2925,7 @@ fn lessopen_stdin_piped() {
 fn lessopen_and_lessclose_file_temp() {
     // This is mainly to test that $LESSCLOSE gets passed the correct file paths
     // In this case, the original file and the temporary file returned by $LESSOPEN
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "echo empty.txt && echo %s >/dev/null")
         .env("LESSCLOSE", "echo lessclose: %s %s")
@@ -2941,7 +2942,7 @@ fn lessopen_and_lessclose_file_temp() {
 fn lessopen_and_lessclose_file_piped() {
     // This is mainly to test that $LESSCLOSE gets passed the correct file paths
     // In these cases, the original file and a dash
-    bat()
+    kit()
         // This test will not work properly if $LESSOPEN does not output anything
         .env("LESSOPEN", "|cat %s")
         .env("LESSCLOSE", "echo lessclose: %s %s")
@@ -2951,7 +2952,7 @@ fn lessopen_and_lessclose_file_piped() {
         .success()
         .stdout("hello world\nlessclose: test.txt -\n");
 
-    bat()
+    kit()
         .env("LESSOPEN", "||cat %s")
         .env("LESSCLOSE", "echo lessclose: %s %s")
         .arg("--lessopen")
@@ -2967,7 +2968,7 @@ fn lessopen_and_lessclose_file_piped() {
 fn lessopen_and_lessclose_stdin_temp() {
     // This is mainly to test that $LESSCLOSE gets passed the correct file paths
     // In this case, a dash and the temporary file returned by $LESSOPEN
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "-echo empty.txt && echo %s >/dev/null")
         .env("LESSCLOSE", "echo lessclose: %s %s")
@@ -2984,7 +2985,7 @@ fn lessopen_and_lessclose_stdin_temp() {
 fn lessopen_and_lessclose_stdin_piped() {
     // This is mainly to test that $LESSCLOSE gets passed the correct file paths
     // In these cases, two dashes
-    bat()
+    kit()
         // This test will not work properly if $LESSOPEN does not output anything
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "|-cat test.txt && echo %s >/dev/null")
@@ -2995,7 +2996,7 @@ fn lessopen_and_lessclose_stdin_piped() {
         .success()
         .stdout("hello world\nlessclose: - -\n");
 
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "||-cat empty.txt && echo %s >/dev/null")
         .env("LESSCLOSE", "echo lessclose: %s %s")
@@ -3010,7 +3011,7 @@ fn lessopen_and_lessclose_stdin_piped() {
 #[cfg(feature = "lessopen")]
 #[test]
 fn lessopen_handling_empty_output_file() {
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "|cat empty.txt && echo %s >/dev/null")
         .arg("--lessopen")
@@ -3019,7 +3020,7 @@ fn lessopen_handling_empty_output_file() {
         .success()
         .stdout("hello world\n");
 
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "|cat nonexistent.txt && echo %s >/dev/null")
         .arg("--lessopen")
@@ -3028,7 +3029,7 @@ fn lessopen_handling_empty_output_file() {
         .success()
         .stdout("hello world\n");
 
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "||cat empty.txt && echo %s >/dev/null")
         .arg("--lessopen")
@@ -3037,7 +3038,7 @@ fn lessopen_handling_empty_output_file() {
         .success()
         .stdout("");
 
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "||cat nonexistent.txt && echo %s >/dev/null")
         .arg("--lessopen")
@@ -3052,7 +3053,7 @@ fn lessopen_handling_empty_output_file() {
 #[test]
 // FIXME
 fn lessopen_handling_empty_output_stdin() {
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "|-cat empty.txt && echo %s >/dev/null")
         .arg("--lessopen")
@@ -3061,7 +3062,7 @@ fn lessopen_handling_empty_output_stdin() {
         .success()
         .stdout("hello world\n");
 
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "|-cat nonexistent.txt && echo %s >/dev/null")
         .arg("--lessopen")
@@ -3070,7 +3071,7 @@ fn lessopen_handling_empty_output_stdin() {
         .success()
         .stdout("hello world\n");
 
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "||-cat empty.txt && echo %s >/dev/null")
         .arg("--lessopen")
@@ -3079,7 +3080,7 @@ fn lessopen_handling_empty_output_stdin() {
         .success()
         .stdout("");
 
-    bat()
+    kit()
         // Need a %s for $LESSOPEN to be valid
         .env("LESSOPEN", "||-cat nonexistent.txt && echo %s >/dev/null")
         .arg("--lessopen")
@@ -3093,7 +3094,7 @@ fn lessopen_handling_empty_output_stdin() {
 #[cfg(feature = "lessopen")]
 #[test]
 fn lessopen_uses_shell() {
-    bat()
+    kit()
         .env("LESSOPEN", "|cat < %s")
         .arg("--lessopen")
         .arg("test.txt")
@@ -3106,7 +3107,7 @@ fn lessopen_uses_shell() {
 #[cfg(feature = "lessopen")]
 #[test]
 fn do_not_use_lessopen_by_default() {
-    bat()
+    kit()
         .env("LESSOPEN", "|echo File is %s")
         .arg("test.txt")
         .assert()
@@ -3118,7 +3119,7 @@ fn do_not_use_lessopen_by_default() {
 #[cfg(feature = "lessopen")]
 #[test]
 fn do_not_use_lessopen_if_overridden() {
-    bat()
+    kit()
         .env("LESSOPEN", "|echo File is %s")
         .arg("--lessopen")
         .arg("--no-lessopen")
@@ -3132,7 +3133,7 @@ fn do_not_use_lessopen_if_overridden() {
 #[cfg(feature = "lessopen")]
 #[test]
 fn lessopen_validity() {
-    bat()
+    kit()
         .env("LESSOPEN", "|echo File is test.txt")
         .arg("--lessopen")
         .arg("test.txt")
@@ -3140,10 +3141,10 @@ fn lessopen_validity() {
         .success()
         .stdout("hello world\n")
         .stderr(
-            "\u{1b}[33m[bat warning]\u{1b}[0m: LESSOPEN ignored: must contain exactly one %s\n",
+            "\u{1b}[33m[kit warning]\u{1b}[0m: LESSOPEN ignored: must contain exactly one %s\n",
         );
 
-    bat()
+    kit()
         .env("LESSOPEN", "|echo File is %s")
         .arg("--lessopen")
         .arg("test.txt")
@@ -3152,7 +3153,7 @@ fn lessopen_validity() {
         .stdout("File is test.txt\n")
         .stderr("");
 
-    bat()
+    kit()
         .env("LESSOPEN", "|echo %s is %s")
         .arg("--lessopen")
         .arg("test.txt")
@@ -3160,7 +3161,7 @@ fn lessopen_validity() {
         .success()
         .stdout("hello world\n")
         .stderr(
-            "\u{1b}[33m[bat warning]\u{1b}[0m: LESSOPEN ignored: must contain exactly one %s\n",
+            "\u{1b}[33m[kit warning]\u{1b}[0m: LESSOPEN ignored: must contain exactly one %s\n",
         );
 }
 
@@ -3169,7 +3170,7 @@ fn lessopen_validity() {
 // --map-syntax' case or file extension's case
 #[test]
 fn highlighting_independant_from_map_syntax_case() {
-    let expected = bat()
+    let expected = kit()
         .arg("-f")
         .arg("--map-syntax=*.config:JSON")
         .arg("map-syntax_case.Config")
@@ -3178,7 +3179,7 @@ fn highlighting_independant_from_map_syntax_case() {
         .stdout
         .clone();
 
-    bat()
+    kit()
         .arg("-f")
         .arg("--map-syntax=*.Config:JSON")
         .arg("map-syntax_case.Config")
@@ -3190,7 +3191,7 @@ fn highlighting_independant_from_map_syntax_case() {
 
 #[test]
 fn map_syntax_target_syntax_case_insensitive() {
-    let expected = bat()
+    let expected = kit()
         .arg("-f")
         .arg("--map-syntax=*.config:json")
         .arg("map-syntax_case.Config")
@@ -3199,7 +3200,7 @@ fn map_syntax_target_syntax_case_insensitive() {
         .stdout
         .clone();
 
-    bat()
+    kit()
         .arg("-f")
         .arg("--map-syntax=*.config:json")
         .arg("map-syntax_case.Config")
@@ -3211,7 +3212,7 @@ fn map_syntax_target_syntax_case_insensitive() {
 
 #[test]
 fn strip_ansi_always_strips_ansi() {
-    bat()
+    kit()
         .arg("--style=plain")
         .arg("--decorations=always")
         .arg("--color=never")
@@ -3225,7 +3226,7 @@ fn strip_ansi_always_strips_ansi() {
 #[test]
 fn strip_ansi_never_does_not_strip_ansi() {
     let output = String::from_utf8(
-        bat()
+        kit()
             .arg("--style=plain")
             .arg("--decorations=always")
             .arg("--color=never")
@@ -3245,7 +3246,7 @@ fn strip_ansi_never_does_not_strip_ansi() {
 #[test]
 fn strip_ansi_does_not_affect_simple_printer() {
     let output = String::from_utf8(
-        bat()
+        kit()
             .arg("--style=plain")
             .arg("--decorations=never")
             .arg("--color=never")
@@ -3265,7 +3266,7 @@ fn strip_ansi_does_not_affect_simple_printer() {
 #[test]
 fn strip_ansi_does_not_strip_when_show_nonprintable() {
     let output = String::from_utf8(
-        bat()
+        kit()
             .arg("--style=plain")
             .arg("--decorations=never")
             .arg("--color=always")
@@ -3285,7 +3286,7 @@ fn strip_ansi_does_not_strip_when_show_nonprintable() {
 
 #[test]
 fn strip_ansi_auto_strips_ansi_when_detected_syntax_by_filename() {
-    bat()
+    kit()
         .arg("--style=plain")
         .arg("--decorations=always")
         .arg("--color=never")
@@ -3299,7 +3300,7 @@ fn strip_ansi_auto_strips_ansi_when_detected_syntax_by_filename() {
 
 #[test]
 fn strip_ansi_auto_strips_ansi_when_provided_syntax_by_option() {
-    bat()
+    kit()
         .arg("--style=plain")
         .arg("--decorations=always")
         .arg("--color=never")
@@ -3314,7 +3315,7 @@ fn strip_ansi_auto_strips_ansi_when_provided_syntax_by_option() {
 #[test]
 fn strip_ansi_auto_does_not_strip_when_plain_text_by_filename() {
     let output = String::from_utf8(
-        bat()
+        kit()
             .arg("--style=plain")
             .arg("--decorations=always")
             .arg("--color=never")
@@ -3335,7 +3336,7 @@ fn strip_ansi_auto_does_not_strip_when_plain_text_by_filename() {
 #[test]
 fn strip_ansi_auto_does_not_strip_ansi_when_plain_text_by_option() {
     let output = String::from_utf8(
-        bat()
+        kit()
             .arg("--style=plain")
             .arg("--decorations=always")
             .arg("--color=never")
@@ -3356,7 +3357,7 @@ fn strip_ansi_auto_does_not_strip_ansi_when_plain_text_by_option() {
 // Tests that style components can be removed with `-component`.
 #[test]
 fn style_components_can_be_removed() {
-    bat()
+    kit()
         .arg({
             #[cfg(not(feature = "git"))]
             {
@@ -3379,7 +3380,7 @@ fn style_components_can_be_removed() {
 // Tests that style components are chosen based on the rightmost `--style` argument.
 #[test]
 fn style_components_can_be_overidden() {
-    bat()
+    kit()
         .arg("--style=full")
         .arg("--style=header,numbers")
         .arg("--decorations=always")
@@ -3394,7 +3395,7 @@ fn style_components_can_be_overidden() {
 // Tests that style components can be merged across multiple `--style` arguments.
 #[test]
 fn style_components_will_merge() {
-    bat()
+    kit()
         .arg("--style=header,grid")
         .arg("--style=-grid,+numbers")
         .arg("--decorations=always")
@@ -3406,11 +3407,11 @@ fn style_components_will_merge() {
         .stderr("");
 }
 
-// Tests that style components can be merged with the `BAT_STYLE` environment variable.
+// Tests that style components can be merged with the `KIT_STYLE` environment variable.
 #[test]
 fn style_components_will_merge_with_env_var() {
-    bat()
-        .env("BAT_STYLE", "header,grid")
+    kit()
+        .env("KIT_STYLE", "header,grid")
         .arg("--style=-grid,+numbers")
         .arg("--decorations=always")
         .arg("--color=never")
