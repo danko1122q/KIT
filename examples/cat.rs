@@ -1,6 +1,6 @@
-/// A very simple colorized `cat` clone, using `bat` as a library.
-/// See `src/bin/bat` for the full `bat` application.
-use bat::PrettyPrinter;
+/// A very simple colorized `cat` clone, using `kit` as a library.
+/// See `src/bin/kit` for the full `kit` application.
+use kit::PrettyPrinter;
 
 fn main() {
     PrettyPrinter::new()

@@ -1,5 +1,5 @@
-/// A program that prints its own source code using the bat library
-use bat::{PagingMode, PrettyPrinter, WrappingMode};
+/// A program that prints its own source code using the kit library
+use kit::{PagingMode, PrettyPrinter, WrappingMode};
 
 fn main() {
     PrettyPrinter::new()

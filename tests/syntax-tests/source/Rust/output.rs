@@ -36,15 +36,15 @@ impl OutputType {
 
         let mut replace_arguments_to_less = false;
 
-        let pager_from_env = match (env::var("BAT_PAGER"), env::var("PAGER")) {
-            (Ok(bat_pager), _) => Some(bat_pager),
+        let pager_from_env = match (env::var("KIT_PAGER"), env::var("PAGER")) {
+            (Ok(kit_pager), _) => Some(kit_pager),
             (_, Ok(pager)) => {
                 // less needs to be called with the '-R' option in order to properly interpret the
-                // ANSI color sequences printed by bat. If someone has set PAGER="less -F", we
+                // ANSI color sequences printed by kit. If someone has set PAGER="less -F", we
                 // therefore need to overwrite the arguments and add '-R'.
                 //
-                // We only do this for PAGER (as it is not specific to 'bat'), not for BAT_PAGER
-                // or bats '--pager' command line option.
+                // We only do this for PAGER (as it is not specific to 'kit'), not for KIT_PAGER
+                // or kits '--pager' command line option.
                 replace_arguments_to_less = true;
                 Some(pager)
             }
@@ -68,7 +68,7 @@ impl OutputType {
             Some((pager_name, args)) => {
                 let mut pager_path = PathBuf::from(pager_name);
 
-                if pager_path.file_stem() == Some(&OsString::from("bat")) {
+                if pager_path.file_stem() == Some(&OsString::from("kit")) {
                     pager_path = PathBuf::from("less");
                 }
 

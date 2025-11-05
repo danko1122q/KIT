@@ -15,10 +15,10 @@ fn get_mocked_pagers_dir() -> PathBuf {
 }
 
 /// On Unix: 'most' -> 'most'
-/// On Windows: 'most' -> 'most.bat'
+/// On Windows: 'most' -> 'most.kit'
 pub fn from(base: &str) -> String {
     let mut cmd_and_args = shell_words::split(base).unwrap();
-    let suffix = if cfg!(windows) { ".bat" } else { "" };
+    let suffix = if cfg!(windows) { ".kit" } else { "" };
     let mut out_cmd = format!("{}{suffix}", cmd_and_args.first().unwrap());
 
     if (cmd_and_args.len() > 1) {

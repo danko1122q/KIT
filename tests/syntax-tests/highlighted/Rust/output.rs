@@ -43,8 +43,8 @@
 [38;2;248;248;242m                [0m[38;2;117;113;94m//[0m[38;2;117;113;94m ANSI color sequences printed by bat. If someone has set PAGER="less -F", we[0m
 [38;2;248;248;242m                [0m[38;2;117;113;94m//[0m[38;2;117;113;94m therefore need to overwrite the arguments and add '-R'.[0m
 [38;2;248;248;242m                [0m[38;2;117;113;94m//[0m
-[38;2;248;248;242m                [0m[38;2;117;113;94m//[0m[38;2;117;113;94m We only do this for PAGER (as it is not specific to 'bat'), not for BAT_PAGER[0m
-[38;2;248;248;242m                [0m[38;2;117;113;94m//[0m[38;2;117;113;94m or bats '--pager' command line option.[0m
+[38;2;248;248;242m                [0m[38;2;117;113;94m//[0m[38;2;117;113;94m We only do this for PAGER (as it is not specific to 'kit'), not for KIT_PAGER[0m
+[38;2;248;248;242m                [0m[38;2;117;113;94m//[0m[38;2;117;113;94m or kits '--pager' command line option.[0m
 [38;2;248;248;242m                replace_arguments_to_less [0m[38;2;249;38;114m=[0m[38;2;248;248;242m [0m[38;2;190;132;255mtrue[0m[38;2;248;248;242m;[0m
 [38;2;248;248;242m                [0m[3;38;2;166;226;46mSome[0m[38;2;248;248;242m([0m[38;2;248;248;242mpager[0m[38;2;248;248;242m)[0m
 [38;2;248;248;242m            [0m[38;2;248;248;242m}[0m

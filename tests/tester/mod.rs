@@ -10,15 +10,15 @@ use git2::build::CheckoutBuilder;
 use git2::Repository;
 use git2::Signature;
 
-pub struct BatTester {
+pub struct KitTester {
     /// Temporary working directory
     temp_dir: TempDir,
 
-    /// Path to the *bat* executable
+    /// Path to the *kit* executable
     exe: PathBuf,
 }
 
-impl BatTester {
+impl KitTester {
     pub fn test_snapshot(&self, name: &str, style: &str) {
         let output = Command::new(&self.exe)
             .current_dir(self.temp_dir.path())
@@ -32,7 +32,7 @@ impl BatTester {
                 &format!("--style={style}"),
             ])
             .output()
-            .expect("bat failed");
+            .expect("kit failed");
 
         // have to do the replace because the filename in the header changes based on the current working directory
         let actual = String::from_utf8_lossy(&output.stdout)
@@ -49,7 +49,7 @@ impl BatTester {
     }
 }
 
-impl Default for BatTester {
+impl Default for KitTester {
     fn default() -> Self {
         let temp_dir = create_sample_directory().expect("sample directory");
 
@@ -58,13 +58,13 @@ impl Default for BatTester {
             .parent()
             .expect("tests executable directory")
             .parent()
-            .expect("bat executable directory")
+            .expect("kit executable directory")
             .to_path_buf();
 
-        let exe_name = if cfg!(windows) { "bat.exe" } else { "bat" };
+        let exe_name = if cfg!(windows) { "kit.exe" } else { "kit" };
         let exe = root.join(exe_name);
 
-        BatTester { temp_dir, exe }
+        KitTester { temp_dir, exe }
     }
 }
 
@@ -83,7 +83,7 @@ fn create_sample_directory() -> Result<TempDir, git2::Error> {
     index.add_path(Path::new("sample.rs"))?;
 
     let oid = index.write_tree()?;
-    let signature = Signature::now("bat test runner", "bat@test.runner")?;
+    let signature = Signature::now("kit test runner", "kit@test.runner")?;
     let tree = repo.find_tree(oid)?;
     let _ = repo.commit(
         Some("HEAD"), //  point HEAD to our new commit
