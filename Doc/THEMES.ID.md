@@ -86,35 +86,6 @@ Tambahkan ke `~/.bashrc` atau `~/.zshrc`:
 export KIT_THEME="Dracula"
 ```
 
-## Menambahkan Tema Kustom
-
-Jika Anda ingin menambahkan tema kustom (format `.tmTheme` dari Sublime Text):
-
-### 1. Buat Direktori Tema
-
-```bash
-mkdir -p "$(kit --config-dir)/themes"
-cd "$(kit --config-dir)/themes"
-```
-
-### 2. Download Tema
-
-```bash
-# Contoh: Download tema Snazzy
-git clone https://github.com/greggb/sublime-snazzy
-```
-
-### 3. Update Cache
-
-```bash
-kit cache --build
-```
-
-### 4. Verifikasi
-
-```bash
-kit --list-themes
-```
 
 ## Rekomendasi Tema Berdasarkan Penggunaan
 

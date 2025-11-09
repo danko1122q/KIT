@@ -86,35 +86,6 @@ Add to `~/.bashrc` or `~/.zshrc`:
 export KIT_THEME="Dracula"
 ```
 
-## Adding Custom Themes
-
-If you want to add custom themes (`.tmTheme` format from Sublime Text):
-
-### 1. Create Theme Directory
-
-```bash
-mkdir -p "$(kit --config-dir)/themes"
-cd "$(kit --config-dir)/themes"
-```
-
-### 2. Download Theme
-
-```bash
-# Example: Download Snazzy theme
-git clone https://github.com/greggb/sublime-snazzy
-```
-
-### 3. Update Cache
-
-```bash
-kit cache --build
-```
-
-### 4. Verify
-
-```bash
-kit --list-themes
-```
 
 ## Theme Recommendations by Use Case
 
