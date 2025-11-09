@@ -6,8 +6,8 @@ Kit is a command-line utility inspired by `cat` and `less`, enhanced with modern
 
 
 ### 📖 Configuration Guides:
-* **[English](CONFIGURATION.EN.md)**
-* **[Indonesia](CONFIGURATION.ID.md)**
+* **[English](Doc/CONFIGURATION.EN.md)**
+* **[Indonesia](Doc/CONFIGURATION.ID.md)**
 
 
 ---
@@ -161,4 +161,5 @@ Kit is dual-licensed under MIT OR Apache-2.0.
 
 * Original Code (kit): Copyright (c) 2018-2023 kit-developers [https://github.com/sharkdp/kit](https://github.com/sharkdp/kit)
 * Kit Modifications & Contributions: Copyright (c) 2025 danko112q [https://github.com/danko1122q/kit](https://github.com/danko1122q/kit)
+
 
